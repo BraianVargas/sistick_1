@@ -11,7 +11,7 @@ from data.connection import *
 import common.db
 
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder='templates')
 
 db = getDB() # Engine de Base de datos
 

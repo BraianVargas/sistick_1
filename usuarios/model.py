@@ -25,3 +25,15 @@ class Usuario(db.Base):
 
     def __str__(self):
         return f'Usuario({self.id}, {self.username}, {self.email}, {self.type})'
+
+    def toJson(self):
+        d = dict(
+            __class__ = self.__tablename__,
+            __atributos__ = dict(
+                id = self.id,
+                username = self.username,
+                email = self.email,
+                type = self.type
+            )
+        )
+        return d
