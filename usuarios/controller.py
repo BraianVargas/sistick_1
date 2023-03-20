@@ -1,4 +1,5 @@
 from common.db import *
+from werkzeug.security import check_password_hash
 from usuarios.model import *
 import json
 
@@ -24,11 +25,7 @@ def getUsersController():
           data.append(user.toJson())
      return data
 
-def checkLoginController(user,password):
-     password =  generate_password_hash(
-          password,
-          method='sha256', salt_length=8
-     )
+def checkLoginController(user, username,password):
      if db.session.query(Usuario).filter_by(username = user) and db.session.query(Usuario).filter_by(username = password):
           return True
      else:

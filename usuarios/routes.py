@@ -17,7 +17,10 @@ def index():
 def login():
      if request.method == 'POST':
           # Replace ALl request.form for reques.get_json
+          if "username" in session: 
+               print(session["username"])
           status = checkLoginController(
+               request.form['username'],
                request.form['username'],
                request.form['password']
           )
@@ -34,11 +37,19 @@ def login():
 @userBP.route("/create", methods = ['GET','POST'])
 def createUser():
      if request.method == 'POST':
-          data = request.get_json()
-          statusMessage = createUserController(data)
-          return statusMessage
+          lista=[]
+          a = request.form.to_dict()
+          print(a)
+
+
+          for k,v in request.form.items():
+               lista.append(k)
+               lista.append(v)
+          return lista
+          # data = request.get_json()
+          # statusMessage = createUserController(data)
      else:
-          return "Create User Route"
+          return render_template("user/registerForm.html")
      
 # Ruta para obtener registros de la base de datos.
 # Este método tomará los últimos 100 registros.
