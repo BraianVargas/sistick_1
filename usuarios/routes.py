@@ -8,6 +8,7 @@ from usuarios.controller import *
 
 
 @userBP.route("/")
+@login_required
 def index():
      return "Index User"
 
@@ -28,29 +29,20 @@ def login():
                return redirect("/user/")
           else:
                return redirect("/user/login")
-
      else:
           return render_template("user/LoginForm.html")
-     
+
 # Método para crear usuario. Toma la info del JSON recibido,
 # genera el modelo y almacena en la base de datos
 @userBP.route("/create", methods = ['GET','POST'])
 def createUser():
      if request.method == 'POST':
-          lista=[]
-          a = request.form.to_dict()
-          print(a)
-
-
-          for k,v in request.form.items():
-               lista.append(k)
-               lista.append(v)
-          return lista
-          # data = request.get_json()
-          # statusMessage = createUserController(data)
+          data = request.form.to_dict()
+          statusMessage = createUserController(data)
+          return statusMessage
      else:
           return render_template("user/registerForm.html")
-     
+
 # Ruta para obtener registros de la base de datos.
 # Este método tomará los últimos 100 registros.
 @userBP.route("/getAll", methods = ['GET','POST'])
@@ -60,6 +52,11 @@ def getAllUsers():
           return usersList
      else:
           return "Create User Route"
+
+@userBP.route("/logout", methods = ["GET","POST"])
+def logout():
+     session.pop("username")
+     return redirect(url_for("/user/login"))
 
 # # Ruta para obtener registros de la base de datos.
 # # Este método tomará los últimos 100 registros.

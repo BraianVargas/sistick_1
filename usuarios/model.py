@@ -19,7 +19,8 @@ class Usuario(db.Base):
         self.email = email
         self.password = generate_password_hash(
             password,
-            method='sha256', salt_length=8
+            method='sha256',
+            salt_length=8
         )
         self.type = type
 

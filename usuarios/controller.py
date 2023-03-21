@@ -1,20 +1,26 @@
 from common.db import *
 from werkzeug.security import check_password_hash
-from usuarios.model import *
 import json
+from flask import *
 
+from usuarios.model import *
 
 def createUserController(requestedData):
      try:
+          admin = False
+          print(requestedData)
+          if "isadmin" in requestedData:
+               admin = True
           user = Usuario(
                requestedData['username'],
                requestedData['email'],
                requestedData['password'],
-               requestedData['type'] 
+               admin
           )
+          print(user)
           db.session.add(user)
           db.session.commit()
-          return "Registro cargado correctamente"
+          return redirect(url_for('user_blueprint.login'))
      except Exception as e:
           return f"Error. {e}"
      

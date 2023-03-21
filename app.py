@@ -12,7 +12,7 @@ import common.db
 
 
 app = Flask(__name__,template_folder='templates')
-
+app.config.from_pyfile("data/config.py")
 db = getDB() # Engine de Base de datos
 
 app.register_blueprint(productoBP, url_prefix="/product")
