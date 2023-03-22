@@ -12,19 +12,58 @@
      <div class="card text-center">
           <div class="card-header">
                <ul class="nav nav-tabs card-header-tabs">
-               <li class="nav-item">
-                    <a class="nav-link active" aria-current="true" href="">Home</a>
-               </li>
-               <li class="nav-item">
-                    <a class="nav-link" href="/user/login">Login</a>
-               </li>
-               <li class="nav-item">
-                    <a class="nav-link disabled">Disabled</a>
-               </li>
+                    {% if logged %}
+                         {% if admin %}
+                         {% else %}
+                              <li class="nav-item">
+                                   <a class="nav-link" aria-current="true" href="/">Home</a>
+                              </li>
+                              <li class="nav-item">
+                                   <a class="nav-link" href="/user/login">Tickets</a>
+                              </li>
+                              <li class="nav-item">
+                                   <a class="nav-link" href="/user/create">To-Do</a>
+                              </li>
+                         {% endif %}
+                    {% else %}
+                         <li class="nav-item">
+                              <a class="nav-link" aria-current="true" href="/">Home</a>
+                         </li>
+                         <li class="nav-item">
+                              <a class="nav-link" href="/user/login">Login</a>
+                         </li>
+                         <li class="nav-item">
+                              <a class="nav-link" href="/user/create">Registrarse</a>
+                         </li>
+                    {% endif %}
                </ul>
           </div>
           <div class="card-body">
-               {% block content %}{% endblock %}
+               {% if self.content() %} 
+                    {% block content %}{% endblock %}
+               {% else %}
+                    <div class="jumbotron">
+                         <h1 class="display-3">¡Bienvenido a SisTick!</h1>
+                         <br> 
+                         <p class="lead">Sistema de Tickets para requerimientos de usuarios.</p>
+                         <hr class="my-4">
+                         <p class="col-12 col-md-6 m-auto mb-3">
+                              ¡Bienvenido al sistema de gestión de tickets! Este es un espacio donde podrás gestionar tus solicitudes y tareas pendientes de una manera sencilla y eficiente. En este sistema, podrás visualizar los tickets pendientes y asignados, así como también crear nuevos usuarios y realizar consultas sobre el estado de los tickets.
+
+                              Si ya cuentas con una cuenta, por favor inicia sesión para acceder a tu panel de control. Si aún no tienes una cuenta, puedes registrarte de manera rápida y fácil para empezar a utilizar todas las funcionalidades del sistema.
+                              
+                              Además, este sistema te permitirá generar reportes mensuales, semanales o diarios para llevar un mejor control de tus actividades y tareas pendientes. No te preocupes por perder información importante, ya que todo quedará almacenado en este sistema seguro y confiable.
+                              
+                              ¡Empieza a optimizar tu tiempo y aumentar tu productividad con nuestro sistema de gestión de tickets!
+                         </p>
+                         <p class="col-12 col-md-6 m-auto mb-3">
+                              <a href="/user/login"> Inicie sesión</a> si posee una cuenta, o <a href="/user/create"> registrerse </a> si no.
+                         </p>
+                         
+                         <!-- <a class="btn btn-primary btn-lg" href="/user/create" role="button">Comenzar</a> -->
+                    </div>
+               {% endif %}
+               
           </div>
      </div>
 

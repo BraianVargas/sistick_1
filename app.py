@@ -1,5 +1,5 @@
 # Importación de librerias
-from flask import Flask
+from flask import *
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -17,6 +17,10 @@ db = getDB() # Engine de Base de datos
 
 app.register_blueprint(productoBP, url_prefix="/product")
 app.register_blueprint(userBP, url_prefix="/user")
+
+@app.route("/")
+def index():
+    return render_template("base.html", logged = False)
 
 if __name__ == '__main__':
     app.run(debug=True)

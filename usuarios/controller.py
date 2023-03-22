@@ -8,7 +8,6 @@ from usuarios.model import *
 def createUserController(requestedData):
      try:
           admin = False
-          print(requestedData)
           if "isadmin" in requestedData:
                admin = True
           user = Usuario(
@@ -17,7 +16,6 @@ def createUserController(requestedData):
                requestedData['password'],
                admin
           )
-          print(user)
           db.session.add(user)
           db.session.commit()
           return redirect(url_for('user_blueprint.login'))
@@ -31,10 +29,9 @@ def getUsersController():
           data.append(user.toJson())
      return data
 
-def checkLoginController(user, username,password):
-     if db.session.query(Usuario).filter_by(username = user) and db.session.query(Usuario).filter_by(username = password):
-          return True
-     else:
-          return False
-
-
+def checkLoginController(dataJson):
+     print(dataJson["username"])
+     user = db.session.query(Usuario).filter_by(username = dataJson["username"])
+     print(user)
+     
+     input()

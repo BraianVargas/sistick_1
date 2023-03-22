@@ -8,7 +8,6 @@ from usuarios.controller import *
 
 
 @userBP.route("/")
-@login_required
 def index():
      return "Index User"
 
@@ -20,11 +19,8 @@ def login():
           # Replace ALl request.form for reques.get_json
           if "username" in session: 
                print(session["username"])
-          status = checkLoginController(
-               request.form['username'],
-               request.form['username'],
-               request.form['password']
-          )
+          data = request.form.to_dict()
+          status = checkLoginController(data)
           if status:
                return redirect("/user/")
           else:
