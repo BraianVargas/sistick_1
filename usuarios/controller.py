@@ -1,15 +1,16 @@
-from common.db import *
 from werkzeug.security import check_password_hash
-import json
+from sqlalchemy import *
 from flask import *
 
+import app
+from data.connection import *
 from usuarios.model import *
 
 def createUserController(requestedData):
      try:
-          admin = False
+          admin = "usuario"
           if "isadmin" in requestedData:
-               admin = True
+               admin = "admin"
           user = Usuario(
                requestedData['username'],
                requestedData['email'],
@@ -20,18 +21,26 @@ def createUserController(requestedData):
           db.session.commit()
           return redirect(url_for('user_blueprint.login'))
      except Exception as e:
-          return f"Error. {e}"
+          return f"Error. createUserController. -> \n {e}"
      
 def getUsersController():
      data = []
-     usersList = db.session.query(Usuario).all()
+     usersList = app.db.session.query(Usuario).all()
      for user in usersList:
           data.append(user.toJson())
      return data
 
 def checkLoginController(dataJson):
-     print(dataJson["username"])
-     user = db.session.query(Usuario).filter_by(username = dataJson["username"])
-     print(user)
-     
-     input()
+     query = app.db.session.query(Usuario).filter_by(username = dataJson["username"]).all()
+     for u in query:
+          print(u)
+          if check_password_hash(u.password, dataJson["password"]):
+               print("LOGGED")
+               session.clear()
+               db.session.add(u)
+               return True
+          else:
+               error =  "Usuario o contraseña incorrecto"
+               return error
+
+     input() 

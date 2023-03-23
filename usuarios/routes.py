@@ -17,14 +17,13 @@ def index():
 def login():
      if request.method == 'POST':
           # Replace ALl request.form for reques.get_json
+          status = checkLoginController(request.form.to_dict())
           if "username" in session: 
-               print(session["username"])
-          data = request.form.to_dict()
-          status = checkLoginController(data)
+               print("EN SESION")
           if status:
                return redirect("/user/")
           else:
-               return redirect("/user/login")
+               return render_template("user/LoginForm.html", error=status)
      else:
           return render_template("user/LoginForm.html")
 

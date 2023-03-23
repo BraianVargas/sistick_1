@@ -12,9 +12,9 @@ class Usuario(db.Base):
     username = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    type = Column(String, nullable=False)
+    admin = Column(String, nullable=False)
 
-    def __init__(self, username, email, password, type):
+    def __init__(self, username, email, password, admin="usuario"):
         self.username = username
         self.email = email
         self.password = generate_password_hash(
@@ -22,10 +22,10 @@ class Usuario(db.Base):
             method='sha256',
             salt_length=8
         )
-        self.type = type
+        self.admin = admin
 
     def __str__(self):
-        return f'Usuario({self.id}, {self.username}, {self.email}, {self.type})'
+        return f'Usuario({self.id}, {self.username}, {self.email}, {self.admin})'
 
     def toJson(self):
         d = dict(
@@ -34,7 +34,7 @@ class Usuario(db.Base):
                 id = self.id,
                 username = self.username,
                 email = self.email,
-                type = self.type
+                admin = self.admin
             )
         )
         return d
