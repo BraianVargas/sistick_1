@@ -1,9 +1,9 @@
 from werkzeug.security import check_password_hash
 from sqlalchemy import *
 from flask import *
+import jsonify
 
-import app
-from data.connection import *
+from extensions import db
 from usuarios.model import *
 
 def createUserController(requestedData):
@@ -25,22 +25,19 @@ def createUserController(requestedData):
      
 def getUsersController():
      data = []
-     usersList = app.db.session.query(Usuario).all()
+     usersList = db.session.query(Usuario).all()
      for user in usersList:
           data.append(user.toJson())
      return data
 
 def checkLoginController(dataJson):
-     query = app.db.session.query(Usuario).filter_by(username = dataJson["username"]).all()
-     for u in query:
-          print(u)
-          if check_password_hash(u.password, dataJson["password"]):
-               print("LOGGED")
-               session.clear()
-               db.session.add(u)
-               return True
-          else:
-               error =  "Usuario o contraseña incorrecto"
-               return error
+     user = db.session.query(Usuario).filter_by(username=dataJson["username"]).first()
 
-     input() 
+     if not user or not check_password_hash(user.password, dataJson["password"]):
+          flash('Please check your login details and try again.')
+          return redirect(url_for('usuario.routes.login'))
+     
+     else:
+          db.session.add(user)
+          return True
+     

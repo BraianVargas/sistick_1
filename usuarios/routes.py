@@ -1,9 +1,8 @@
-import flask
-from flask import request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for, session
 import werkzeug
 
 from usuarios import userBP
-from usuarios.model import *
+from usuarios.model import Usuario
 from usuarios.controller import *
 
 
@@ -16,10 +15,7 @@ def index():
 @userBP.route("/login", methods = ['GET','POST'])
 def login():
      if request.method == 'POST':
-          # Replace ALl request.form for reques.get_json
           status = checkLoginController(request.form.to_dict())
-          if "username" in session: 
-               print("EN SESION")
           if status:
                return redirect("/user/")
           else:
@@ -36,6 +32,7 @@ def createUser():
           statusMessage = createUserController(data)
           return statusMessage
      else:
+          if "username" ==
           return render_template("user/registerForm.html")
 
 # Ruta para obtener registros de la base de datos.

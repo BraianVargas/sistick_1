@@ -1,18 +1,16 @@
-import common.db as db
-
-from sqlalchemy import *
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
+from flask import session
+from extensions import db
 
-
-
-class Usuario(db.Base):
+class Usuario(db.Model):
     __tablename__ = 'usuarios'
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String, nullable=False)
-    email = Column(String, nullable=False)
-    password = Column(String, nullable=False)
-    admin = Column(String, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, nullable=False, unique=True)
+    email = db.Column(db.String, nullable=False)
+    password = db.Column(db.String, nullable=False)
+    admin = db.Column(db.String, nullable=False)
 
     def __init__(self, username, email, password, admin="usuario"):
         self.username = username

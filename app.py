@@ -1,23 +1,16 @@
 # Importación de librerias
 from flask import *
-from sqlalchemy import create_engine
-from sqlalchemy import *
 from flask_sqlalchemy import SQLAlchemy
 
-
 # Importación de módulos propios
-from producto import productoBP
+from extensions import db
 from usuarios import userBP
-from data.connection import *
-
 
 app = Flask(__name__,template_folder='templates')
 app.config.from_pyfile("data/config.py")
 
+db.init_app(app)
 
-db = SQLAlchemy(app)
-
-app.register_blueprint(productoBP, url_prefix="/product")
 app.register_blueprint(userBP, url_prefix="/user")
 
 @app.route("/")
