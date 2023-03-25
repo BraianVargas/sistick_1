@@ -16,12 +16,15 @@ def index():
 def login():
      if request.method == 'POST':
           status = checkLoginController(request.form.to_dict())
-          if status:
-               return redirect("/user/")
+          if status == True:
+               return render_template("user/index.html", logged = True)
           else:
                return render_template("user/LoginForm.html", error=status)
      else:
-          return render_template("user/LoginForm.html")
+          if session.get("username") != None:
+               return render_template("user/index.html", logged = True)
+          else:
+               return render_template("user/LoginForm.html")
 
 # Método para crear usuario. Toma la info del JSON recibido,
 # genera el modelo y almacena en la base de datos
@@ -32,7 +35,6 @@ def createUser():
           statusMessage = createUserController(data)
           return statusMessage
      else:
-          if "username" ==
           return render_template("user/registerForm.html")
 
 # Ruta para obtener registros de la base de datos.
@@ -43,20 +45,9 @@ def getAllUsers():
           usersList = getUsersController()
           return usersList
      else:
-          return "Create User Route"
+          return "ERROR"
 
 @userBP.route("/logout", methods = ["GET","POST"])
 def logout():
      session.pop("username")
-     return redirect(url_for("/user/login"))
-
-# # Ruta para obtener registros de la base de datos.
-# # Este método tomará los últimos 100 registros.
-# @userBP.route("/getAll", methods = ['GET','POST'])
-# def getAllUsers():
-#      if request.method == 'GET':
-#           usersList = getUsersController()
-#           return usersList
-#      else:
-#           return "Create User Route"
-
+     return redirect(url_for("user_blueprint.login"))

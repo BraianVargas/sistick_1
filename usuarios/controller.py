@@ -1,7 +1,6 @@
 from werkzeug.security import check_password_hash
 from sqlalchemy import *
 from flask import *
-import jsonify
 
 from extensions import db
 from usuarios.model import *
@@ -34,10 +33,10 @@ def checkLoginController(dataJson):
      user = db.session.query(Usuario).filter_by(username=dataJson["username"]).first()
 
      if not user or not check_password_hash(user.password, dataJson["password"]):
-          flash('Please check your login details and try again.')
-          return redirect(url_for('usuario.routes.login'))
-     
+          flash('Usuario o contraseña incorrectos. Reintente.')
+          return redirect(url_for("user_blueprint.login"))
      else:
-          db.session.add(user)
+          session["username"]=user.username
+          session["admin"]=user.admin
           return True
      
