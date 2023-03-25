@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %} Ingreso {% endblock %}
+{% block content %}
+     <body>
+          <div class="container">
+               <h1>Tickets Pendientes</h1>
+               <table class="table">
+                    <thead>
+                         <tr>
+                              <th>ID</th>
+                              <th>Título</th>
+                              <th>Descripción</th>
+                              <th>Creador</th>
+                              <th>Asignado a</th>
+                              <th>Estado</th>
+                              <th>Fecha</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         <!-- Aquí se generará dinámicamente la lista de tickets pendientes -->
+                         {% for ticket in data %}
+                              <tr>
+                                   <th>{{ticket.id}}</th>
+                                   <th>{{ticket.title}}</th>
+                                   <th>{{ticket.description}}</th>
+                                   <th>{{ticket.creator_id}}</th>
+                                   <th>{{ticket.assigned_to}}</th>
+                                   <th>{{ticket.state}}</th>
+                                   <th>{{ticket.date}}</th>
+                              </tr>
+                         {% endfor %}
+                    </tbody>
+               </table>
+          </div>
+     </body>
+{% endblock %}
