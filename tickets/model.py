@@ -1,17 +1,21 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
 from flask import session
+import datetime
+
+
+
 from extensions import db
 
 class Ticket(db.Model):
      __tablename__ = 'tickets'
 
      id = db.Column(db.Integer, primary_key=True)
-     title = db.Column(db.String, nullable=False, unique=True)
-     description = db.Column(db.String, nullable=False, unique=True)
-     creator_id = db.Column(db.String, nullable=False, unique=True)
-     assigned_to = db.Column(db.String, nullable=False, unique=True)
-     state = db.Column(db.String, nullable=False, unique=True)
+     title = db.Column(db.String, nullable=False)
+     description = db.Column(db.String, nullable=False)
+     creator_id = db.Column(db.String, nullable=False)
+     assigned_to = db.Column(db.String, nullable=False)
+     state = db.Column(db.String, nullable=False)
      date = db.Column(db.String, nullable=False)
 
      def __init__(self,title,description,creator_id,assigned_to,state,date):
@@ -23,7 +27,7 @@ class Ticket(db.Model):
           self.date = date
 
      def __str__(self):
-          return f'Usuario({self})'
+          return f'Ticket({self})'
 
      def toJson(self):
           d = dict(

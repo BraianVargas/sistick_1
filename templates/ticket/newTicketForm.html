@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %} Ingreso {% endblock %}
+{% block content %}
+    <body>
+        <div class="container w-50">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-dismissible fade show {% if 'Error' in messages %} alert-danger {% else %} alert-success {% endif %}" role="alert">
+                        <ul class="mb-0">
+                            {% for message in messages %}
+                                <li class="" style="list-style:none">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <h1>Crea un nuevo ticket</h1>
+            <form action="/tickets/newTicket" method="POST">
+                <div class="form-floating mb-3">
+                    <input type="text" id="titulo" name="title" class="form-control" required>
+                    <label for="titulo">Título</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <textarea id="descripcion" name="description" class="form-control" rows="4" cols="50" required></textarea>
+                    <label for="descripcion">Descripción</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <select class="form-select" id="asignado_a" name="assigned_to" required>
+                        <option value="" disabled selected>Selecciona una opción</option>
+                        
+                        {% for user in users %}
+                        <option value="{{ user.username }}">{{user.username.capitalize()}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="asignado_a">Asignado a</label>
+                </div>
+                
+                <div class="form-floating mb-3">
+                    <select id="estado" name="state" class="form-select">
+                        <option value="Abierto">Abierto</option>
+                        <option value="En progreso">En progreso</option>
+                        <option value="Resuelto">Resuelto</option>
+                        <option value="Cerrado">Cerrado</option>
+                    </select>
+                    <label for="estado">Estado</label>
+                </div>
+
+                <input type="submit" value="Crear ticket" class="btn btn-primary">
+            </form>
+        </div>
+    </body>
+{% endblock %}
