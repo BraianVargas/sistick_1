@@ -1,7 +1,6 @@
 from flask import request, render_template, redirect, url_for, session
 
 from tickets import ticketsBP
-from tickets.model import Ticket
 from tickets.controller import *
 
 
@@ -24,3 +23,13 @@ def newTicket():
           data = request.form.to_dict()
           createTicketController(data)
           return render_template("ticket/newTicketForm.html", logged = True, admin=session["admin"], users = users)
+     
+@ticketsBP.route("/edit/<int:ticketId>", methods=["GET","POST"])
+def editTicket(ticketId):
+     editTicketController(ticketId)
+     return redirect(url_for("ticket_blueprint.index"))
+     
+@ticketsBP.route("/delete/<int:ticketId>", methods=["GET","POST"])
+def deleteTicket(ticketId):
+     print(ticketId)
+     return redirect(url_for("ticket_blueprint.index"))

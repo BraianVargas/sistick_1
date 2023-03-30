@@ -14,6 +14,7 @@
                               <th>Asignado a</th>
                               <th>Estado</th>
                               <th>Fecha</th>
+                              <th>Opciones</th>
                          </tr>
                     </thead>
                     <tbody>
@@ -27,8 +28,18 @@
                                    <th>{{ticket.assigned_to}}</th>
                                    <th>{{ticket.state}}</th>
                                    <th>{{ticket.date}}</th>
+                                   <th>
+                                        <a href="{{ url_for('ticket_blueprint.editTicket', ticketId=ticket.id) }}" class="btn btn-success">
+                                             <i class="bi bi-pencil"></i>
+                                        </a>                                         
+                                        <a href="{{ url_for('ticket_blueprint.deleteTicket', ticketId=ticket.id) }}" class="btn btn-danger">
+                                             <i class="bi bi-trash"></i>
+                                        </a>
+                                   </th>
+
                               </tr>
                          {% endfor %}
+
                     </tbody>
                     <!-- <div class="pagination justify-content-center mt-3">
                          {{ pagination.links }}

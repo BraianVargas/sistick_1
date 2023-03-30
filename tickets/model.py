@@ -1,10 +1,3 @@
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash
-from flask import session
-import datetime
-
-
-
 from extensions import db
 
 class Ticket(db.Model):
@@ -26,8 +19,9 @@ class Ticket(db.Model):
           self.state = state
           self.date = date
 
+
      def __str__(self):
-          return f'Ticket({self})'
+          return f'Ticket({self.toJson()})'
 
      def toJson(self):
           d = dict(
