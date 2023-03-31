@@ -17,7 +17,7 @@
             {% endwith %}
 
             <h1>Crea un nuevo ticket</h1>
-            <form action="/tickets/newTicket" method="POST">
+            <form id="new-ticket-form" method="POST">
                 <div class="form-floating mb-3">
                     <input type="text" id="titulo" name="title" class="form-control" required>
                     <label for="titulo">Título</label>
@@ -48,8 +48,27 @@
                     <label for="estado">Estado</label>
                 </div>
 
-                <input type="submit" value="Crear ticket" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Crear ticket</button>
             </form>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Confirmación de creación de ticket</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Está seguro de que desea crear este ticket?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" form="new-ticket-form" class="btn btn-primary">Crear ticket</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 {% endblock %}

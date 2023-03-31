@@ -2,11 +2,23 @@
 {% block title %} Ingreso {% endblock %}
 {% block content %}
      <body>
+          {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-dismissible fade show {% if 'Error' in messages %} alert-danger {% else %} alert-success {% endif %}" role="alert">
+                        <ul class="mb-0">
+                            {% for message in messages %}
+                                <li class="" style="list-style:none">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endwith %}
           <div class="container">
                <h1>Tickets Pendientes</h1>
                <table class="table">
                     <thead>
-                         <tr>
+                         <tr class="alert alert-dark">
                               <th>ID</th>
                               <th>Título</th>
                               <th>Descripción</th>
@@ -16,37 +28,71 @@
                               <th>Fecha</th>
                               <th>Opciones</th>
                          </tr>
+                         <tr>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                              <th></th>
+                         </tr>
                     </thead>
+
                     <tbody>
                          <!-- Aquí se generará dinámicamente la lista de tickets pendientes -->
                          {% for ticket in data %}
-                              <tr>
+                              <tr {% if ticket.state.lower() == "cerrado" %} class="alert alert-danger" {% else %} class="alert alert-success" {% endif %}>
                                    <th>{{ticket.id}}</th>
                                    <th>{{ticket.title}}</th>
                                    <th>{{ticket.description}}</th>
-                                   <th>{{ticket.creator_id}}</th>
-                                   <th>{{ticket.assigned_to}}</th>
+                                   {% for user in users %}
+                                        {% if user.id == ticket.assigned_to %}
+                                             <th>{{user.username}}</th>
+                                        {% endif %}
+                                        {% if user.id == ticket.creator_id %}
+                                             <th>{{user.username}}</th>
+                                        {% endif %}
+                                   {% endfor %}
                                    <th>{{ticket.state}}</th>
                                    <th>{{ticket.date}}</th>
                                    <th>
                                         <a href="{{ url_for('ticket_blueprint.editTicket', ticketId=ticket.id) }}" class="btn btn-success">
                                              <i class="bi bi-pencil"></i>
                                         </a>                                         
-                                        <a href="{{ url_for('ticket_blueprint.deleteTicket', ticketId=ticket.id) }}" class="btn btn-danger">
+                                        <a type="button" data-bs-toggle="modal" data-bs-target="#delete-ticket-modal" class="btn btn-danger">
                                              <i class="bi bi-trash"></i>
                                         </a>
                                    </th>
+                                   <!-- Modal de confirmación de eliminación -->
+                                   <div class="modal fade " id="delete-ticket-modal" tabindex="-1" aria-labelledby="delete-ticket-modal-label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                             <div class="modal-content">
+                                                  <div class="modal-header alert alert-dark">
+                                                       <h5 class="modal-title" id="delete-ticket-modal-label">Confirmar elminación de ticket</h5>
+                                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                       ¿Está seguro de que desea eliminar este ticket?
+                                                  </div>
+                                                  <div class="modal-footer bg-secondary">
+                                                       <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                                                       <a href="{{ url_for('ticket_blueprint.deleteTicket', ticketId=ticket.id) }}"
+                                                       type="submit" class="btn btn-danger" form="delete-ticket-form">Confirmar</a>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
 
                               </tr>
                          {% endfor %}
 
                     </tbody>
-                    <!-- <div class="pagination justify-content-center mt-3">
-                         {{ pagination.links }}
-                    </div> -->
                </table>
           </div>
           <br>
+          
           <div class="d-flex justify-content-end m-5">
                <a href="{{ url_for('ticket_blueprint.newTicket') }}" class="btn btn-primary">Nuevo Ticket</a>
           </div>

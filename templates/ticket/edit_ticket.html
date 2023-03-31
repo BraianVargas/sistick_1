@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Editar Ticket #{{ ticket.id }}</h1>
+<h3>Estado actual: {{ ticket.state }}</h3>
+<form method="post" class="w-50 m-auto" action="/tickets/edit/{{ticket.id}}" id="edit-ticket-form">
+     <div class="form-floating mb-3">
+          <input type="text" id="titulo" name="title" class="form-control" value={{ticket.title}}>
+          <label for="titulo">Título</label>
+     </div>
+     <div class="form-floating mb-3">
+          <textarea id="descripcion" name="description" class="form-control" rows="4"
+               cols="50">{{ticket.description}}</textarea>
+          <label for="descripcion">Descripción</label>
+     </div>
+     <div class="form-floating mb-3">
+          <select class="form-select" id="asignado_a" name="assigned_to" required>
+               <option value="" disabled>Selecciona una opción</option>
+               {% for user in users %}
+                    {% if user.id == ticket.assigned_to %}
+                         <option value="{{ user.id }}" selected>{{user.username.capitalize()}}</option>
+                    {% else  %}
+                         <option value="{{ user.id }}">{{user.username.capitalize()}}</option>
+                    {% endif %}
+               {% endfor %}
+          </select>
+          <label for="asignado_a">Asignado a</label>
+     </div>
+     <div class="form-floating mb-3">
+          <select id="estado" name="state" class="form-select">
+               <option value="Abierto">Abierto</option>
+               <option value="En progreso">En progreso</option>
+               <option value="Cerrado">Cerrado</option>
+          </select>
+          <label for="estado">Estado</label>
+     </div>
+     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-ticket-modal">Save Changes</button>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="edit-ticket-modal" tabindex="-1" aria-labelledby="edit-ticket-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="edit-ticket-modal-label">Confirmar edición de ticket</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro de que desea guardar los cambios del ticket editado?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary" form="edit-ticket-form">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
