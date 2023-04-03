@@ -30,12 +30,20 @@ def login():
 # genera el modelo y almacena en la base de datos
 @userBP.route("/create", methods = ['GET','POST'])
 def createUser():
-     if request.method == 'POST':
-          data = request.form.to_dict()
-          statusMessage = createUserController(data)
-          return statusMessage
+     if "username" in session:
+          admin = db.session.query(Usuario).filter_by(username = session["username"]).first()
+          if admin.admin == "admin":
+               if request.method == 'POST':
+                    data = request.form.to_dict()
+                    statusMessage = createUserController(data)
+                    return statusMessage
+               else:
+                    return render_template("user/registerForm.html")
+          else:
+               return redirect(url_for("ticket_blueprint.index"))
      else:
-          return render_template("user/registerForm.html")
+          return redirect(url_for("user_blueprint.login"))
+
 
 # Ruta para obtener registros de la base de datos.
 # Este método tomará los últimos 100 registros.

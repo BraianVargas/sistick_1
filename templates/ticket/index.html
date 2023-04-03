@@ -44,19 +44,25 @@
                          <!-- Aquí se generará dinámicamente la lista de tickets pendientes -->
                          {% for ticket in data %}
                               <tr {% if ticket.state.lower() == "cerrado" %} class="alert alert-danger" {% else %} class="alert alert-success" {% endif %}>
+
                                    <th>{{ticket.id}}</th>
                                    <th>{{ticket.title}}</th>
                                    <th>{{ticket.description}}</th>
+
                                    {% for user in users %}
                                         {% if user.id == ticket.assigned_to %}
                                              <th>{{user.username}}</th>
                                         {% endif %}
+                                   {% endfor %}
+                                   {% for user in users %}
                                         {% if user.id == ticket.creator_id %}
                                              <th>{{user.username}}</th>
                                         {% endif %}
                                    {% endfor %}
+
                                    <th>{{ticket.state}}</th>
                                    <th>{{ticket.date}}</th>
+
                                    <th>
                                         <a href="{{ url_for('ticket_blueprint.editTicket', ticketId=ticket.id) }}" class="btn btn-success">
                                              <i class="bi bi-pencil"></i>
@@ -65,6 +71,7 @@
                                              <i class="bi bi-trash"></i>
                                         </a>
                                    </th>
+                                   
                                    <!-- Modal de confirmación de eliminación -->
                                    <div class="modal fade " id="delete-ticket-modal" tabindex="-1" aria-labelledby="delete-ticket-modal-label" aria-hidden="true">
                                         <div class="modal-dialog">

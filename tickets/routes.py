@@ -56,5 +56,5 @@ def deleteTicket(ticketId):
           except Exception as e:
                flash(f"Error en actualización de ticket. \n {e}")
                return
-     else:
+     else:                                                                                                                                                  
           return redirect(url_for("user_blueprint.login"))
