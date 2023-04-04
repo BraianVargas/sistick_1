@@ -17,7 +17,10 @@ def login():
      if request.method == 'POST':
           status = checkLoginController(request.form.to_dict())
           if status == True:
-               return render_template("user/index.html", logged = True)
+               if (db.session.query(Usuario).filter_by(username = session["username"]).first()).admin == "admin":
+                    return redirect(url_for("ticket_blueprint.assignedToMe"))
+               else:
+                    return redirect(url_for("ticket_blueprint.assignedToMe"))
           else:
                return render_template("user/LoginForm.html", error=status)
      else:

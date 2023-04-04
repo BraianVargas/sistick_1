@@ -1,5 +1,5 @@
 from flask import *
-from datetime import date
+import datetime
 
 from extensions import db
 from tickets.model import Ticket
@@ -21,7 +21,7 @@ def createTicketController(data):
                creator.id,
                assigned.id,
                data["state"].lower(),
-               str(date.today().strftime("%d-%m-%Y"))
+               str((datetime.datetime.now()))
           )
           db.session.add(ticket)
           db.session.commit()

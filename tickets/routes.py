@@ -1,4 +1,5 @@
 from flask import request, render_template, redirect, url_for, session
+import datetime
 
 from tickets import ticketsBP
 from tickets.controller import *
@@ -45,7 +46,6 @@ def editTicket(ticketId):
 @ticketsBP.route("/delete/<int:ticketId>", methods=["GET","POST"])
 def deleteTicket(ticketId):
      if session.get("username") != None:
-          users = db.session.query(Usuario).all()    
           try:
                ticket = db.session.query(Ticket).filter_by(id=ticketId).first()
                # Delete the ticket from the database
@@ -58,3 +58,15 @@ def deleteTicket(ticketId):
                return
      else:                                                                                                                                                  
           return redirect(url_for("user_blueprint.login"))
+     
+@ticketsBP.route("/assigned", methods = ["GET","POST"])
+def assignedToMe():
+     user = db.session.query(Usuario).filter_by(username=session["username"]).first()
+    
+     tickets = db.session.query(Ticket).filter(
+          (Ticket.assigned_to == user.id) & 
+          ((Ticket.state == "abierto") | ((Ticket.state == "cerrado") & (Ticket.date == datetime.datetime.today().date())))
+     ).all()
+
+     users = db.session.query(Usuario).all()
+     return render_template("ticket/assigned.html", logged = True, tickets=tickets, data = tickets, users =users)

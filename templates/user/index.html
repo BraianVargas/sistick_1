@@ -2,13 +2,39 @@
 {% block title %} Inicio {% endblock %}
 {% block content %}
 <body>
-     <h1>Ticket System</h1>
-     <p>Seleccione una opción:</p>
-     <form>
-          <button type="submit" formaction="/crear-tickets">Crear Tickets</button>
-          <button type="submit" formaction="/ver-tickets-en-espera">Ver Tickets en Espera</button>
-          <button type="submit" formaction="/ver-tickets-asignados">Ver Tickets Asignados</button>
-     </form>
+     <div class="container">
+          <h1>Tickets asignados a ti</h1>
+          <table class="table">
+              <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Descripción</th>
+                  <th>Creador</th>
+                  <th>Asignado a</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for ticket in tickets %}
+              <tr>
+                  <td>{{ ticket.id }}</td>
+                  <td>{{ ticket.titulo }}</td>
+                  <td>{{ ticket.descripcion }}</td>
+                  <td>{{ ticket.creador }}</td>
+                  <td>{{ ticket.asignado_a }}</td>
+                  <td>{{ ticket.estado }}</td>
+                  <td>{{ ticket.fecha }}</td>
+                  <td>
+                      <a href="/editar/{{ ticket.id }}" class="btn btn-sm btn-primary">Editar</a>
+                  </td>
+              </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+      </div>
  </body>
 
 {% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %} Tickets Asignados {% endblock %}
+{% block content %}
+     <body>
+          {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-dismissible fade show {% if 'Error' in messages %} alert-danger {% else %} alert-success {% endif %}" role="alert">
+                        <ul class="mb-0">
+                            {% for message in messages %}
+                                <li class="" style="list-style:none">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+               {% endif %}
+          {% endwith %}
+          <div class="container">
+               <h1>Tickets asignados a ti</h1>
+               <table class="table">
+                    <thead>
+                    <tr class="table-dark">
+                         <th>ID</th>
+                         <th>Título</th>
+                         <th>Descripción</th>
+                         <th>Creador</th>
+                         <th>Asignado a</th>
+                         <th>Estado</th>
+                         <th>Fecha</th>
+                         <th>Acciones</th>
+                    </tr>
+                    <tr>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for ticket in tickets %}
+                    <tr {% if ticket.state.lower() == "cerrado" %} class="alert alert-danger" {% else %} class="alert alert-success" {% endif %}>
+                         <td>{{ ticket.id }}</td>
+                         <td>{{ ticket.title }}</td>
+                         <td>{{ ticket.description }}</td>
+                         
+                         {% for user in users %}
+                              {% if user.id == ticket.creator_id %}
+                                   <td>{{user.username}}</td>
+                              {% endif %}
+                         {% endfor %}
+                         {% for user in users %}
+                              {% if user.id == ticket.assigned_to %}
+                                   <td>{{user.username}}</td>
+                              {% endif %}
+                         {% endfor %}
+                         <td>{{ ticket.state }}</td>
+                         <td>{{ ticket.date }}</td>
+                         <td>
+                              <a href="/editar/{{ ticket.id }}" class="btn btn-sm btn-primary">Editar</a>
+                         </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+               </table>
+          </div>
+     </body>
+{% endblock %}

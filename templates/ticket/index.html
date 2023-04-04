@@ -16,9 +16,9 @@
             {% endwith %}
           <div class="container">
                <h1>Tickets Pendientes</h1>
-               <table class="table">
+               <table class="table table-striped">
                     <thead>
-                         <tr class="alert alert-dark">
+                         <tr class="table-dark">
                               <th>ID</th>
                               <th>Título</th>
                               <th>Descripción</th>
@@ -43,19 +43,19 @@
                     <tbody>
                          <!-- Aquí se generará dinámicamente la lista de tickets pendientes -->
                          {% for ticket in data %}
-                              <tr {% if ticket.state.lower() == "cerrado" %} class="alert alert-danger" {% else %} class="alert alert-success" {% endif %}>
+                              <tr {% if ticket.state.lower() == "cerrado" %} class="table-danger" {% else %} class="table-success" {% endif %}>
 
                                    <th>{{ticket.id}}</th>
                                    <th>{{ticket.title}}</th>
                                    <th>{{ticket.description}}</th>
 
                                    {% for user in users %}
-                                        {% if user.id == ticket.assigned_to %}
+                                        {% if user.id == ticket.creator_id %}
                                              <th>{{user.username}}</th>
                                         {% endif %}
                                    {% endfor %}
                                    {% for user in users %}
-                                        {% if user.id == ticket.creator_id %}
+                                        {% if user.id == ticket.assigned_to %}
                                              <th>{{user.username}}</th>
                                         {% endif %}
                                    {% endfor %}

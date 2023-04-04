@@ -1,3 +1,5 @@
+import datetime
+
 from extensions import db
 
 class Ticket(db.Model):
@@ -11,7 +13,7 @@ class Ticket(db.Model):
      state = db.Column(db.String, nullable=False)
      date = db.Column(db.String, nullable=False)
 
-     def __init__(self,title,description,creator_id,assigned_to,state,date):
+     def __init__(self,title,description,creator_id,assigned_to,state,date=datetime.datetime.now()):
           self.title = title
           self.description = description
           self.creator_id = creator_id
