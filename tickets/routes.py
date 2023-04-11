@@ -11,7 +11,7 @@ def index():
      if session.get("username") != None:
           data = getAllTicketsController()
           users = db.session.query(Usuario).order_by(Usuario.id.desc()).all()
-          return render_template("ticket/index.html", data = data, logged=True, admin=session["admin"], users = users)
+          return render_template("ticket/index.html", data = data, logged=True, admin=session["admin"], users = users, username = session["username"])
      else:
           return redirect(url_for("user_blueprint.login"))
 
