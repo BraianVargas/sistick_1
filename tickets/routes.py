@@ -21,7 +21,7 @@ def newTicket():
      if session.get("username") != None:
           users = db.session.query(Usuario).all()
           if request.method == "GET":
-               return render_template("ticket/newTicketForm.html", logged = True, admin=session["admin"], users = users)
+               return render_template("ticket/newTicketForm.html", logged = True, admin=session["admin"], users = users, username=session["username"])
           else:
                data = request.form.to_dict()
                createTicketController(data)
@@ -69,4 +69,4 @@ def assignedToMe():
      ).all()
 
      users = db.session.query(Usuario).all()
-     return render_template("ticket/assigned.html", logged = True, tickets=tickets, data = tickets, users =users)
+     return render_template("ticket/assigned.html", logged = True, tickets=tickets, data = tickets, users =users, admin=session["admin"], username=session["username"])
