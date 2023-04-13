@@ -11,6 +11,8 @@ class Usuario(db.Model):
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
     admin = db.Column(db.String, nullable=False)
+    sysactive = db.Column(db.String, nullable=False)
+
 
     def __init__(self, username, email, password, admin="usuario"):
         self.username = username

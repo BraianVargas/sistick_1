@@ -58,8 +58,10 @@
                          {% endfor %}
                          <td>{{ ticket.state }}</td>
                          <td>{{ ticket.date }}</td>
-                         <td>
-                              <a href="/editar/{{ ticket.id }}" class="btn btn-sm btn-primary">Editar</a>
+                         <td class="">
+                              <a href="{{ url_for('ticket_blueprint.editTicket', ticketId=ticket.id) }}" class="btn btn-success">
+                                   <i class="bi bi-pencil"></i>
+                              </a>
                          </td>
                     </tr>
                     {% endfor %}

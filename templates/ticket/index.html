@@ -1,107 +1,138 @@
 {% extends "base.html" %}
 {% block title %} Ingreso {% endblock %}
 {% block content %}
-     <body>
-          {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="alert alert-dismissible fade show {% if 'Error' in messages %} alert-danger {% else %} alert-success {% endif %}" role="alert">
-                        <ul class="mb-0">
-                            {% for message in messages %}
-                                <li class="" style="list-style:none">{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endif %}
-            {% endwith %}
-          <div class="container">
-               <h1>Tickets Pendientes</h1>
-               <table class="table table-striped">
-                    <thead>
-                         <tr class="table-dark">
-                              <th>ID</th>
-                              <th>Título</th>
-                              <th>Descripción</th>
-                              <th>Creador</th>
-                              <th>Asignado a</th>
-                              <th>Estado</th>
-                              <th>Fecha</th>
-                              <th>Opciones</th>
-                         </tr>
-                         <tr>
-                              <th></th>
-                              <th></th>
-                              <th></th>
-                              <th></th>
-                              <th></th>
-                              <th></th>
-                              <th></th>
-                              <th></th>
-                         </tr>
-                    </thead>
+<style>
+     .deleted {
+          opacity: 0.4;
+          cursor: not-allowed;
+     }
+</style>
 
-                    <tbody>
-                         <!-- Aquí se generará dinámicamente la lista de tickets pendientes -->
-                         {% for ticket in data %}
-                              <tr {% if ticket.state.lower() == "cerrado" %} class="table-danger" {% else %} class="table-success" {% endif %}>
+<body>
+     {% with messages = get_flashed_messages() %}
+     {% if messages %}
+     <div class="alert alert-dismissible fade show {% if 'Error' in messages %} alert-danger {% else %} alert-success {% endif %}"
+          role="alert">
+          <ul class="mb-0">
+               {% for message in messages %}
+               <li class="" style="list-style:none">{{ message }}</li>
+               {% endfor %}
+          </ul>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     {% endif %}
+     {% endwith %}
+     <div class="container">
+          <h1 class="d-flex justify-content-center mb-3">Todos los Tickets</h1>
+          <table class="table table-striped">
+               <thead>
+                    <tr class="table-dark">
+                         <th>ID</th>
+                         <th>Título</th>
+                         <th>Descripción</th>
+                         <th>Creador</th>
+                         <th>Asignado a</th>
+                         <th>Estado</th>
+                         <th>Fecha</th>
+                         <th class="{% if admin!='admin' %} d-none {% endif %}">Opciones</th>
+                    </tr>
+                    <tr>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th></th>
+                         <th class="{% if admin!='admin' %} d-none {% endif %}"></th>
+                    </tr>
+               </thead>
 
-                                   <th>{{ticket.id}}</th>
-                                   <th>{{ticket.title}}</th>
-                                   <th>{{ticket.description}}</th>
+               <tbody>
+                    <!-- Aquí se generará dinámicamente la lista de tickets pendientes -->
+                    {% for ticket in data %}
+                    <tr class="
+                                   {% if ticket.sysactive == '0' %} deleted {% endif %}
+                                   {% if ticket.state.lower() == 'cerrado' %} table-danger {% else %} table-success {% endif %}
+                              ">
 
-                                   {% for user in users %}
-                                        {% if user.id == ticket.creator_id %}
-                                             <th>{{user.username}}</th>
-                                        {% endif %}
-                                   {% endfor %}
-                                   {% for user in users %}
-                                        {% if user.id == ticket.assigned_to %}
-                                             <th>{{user.username}}</th>
-                                        {% endif %}
-                                   {% endfor %}
+                         <th>
+                              <p>{{ticket.id}}</p>
+                         </th>
+                         <th>
+                              <p>{{ticket.title}}</p>
+                         </th>
+                         <th>
+                              <p>{{ticket.description}}</p>
+                         </th>
 
-                                   <th>{{ticket.state}}</th>
-                                   <th>{{ticket.date}}</th>
-
-                                   <th>
-                                        <a href="{{ url_for('ticket_blueprint.editTicket', ticketId=ticket.id) }}" class="btn btn-success">
-                                             <i class="bi bi-pencil"></i>
-                                        </a>                                         
-                                        <a type="button" data-bs-toggle="modal" data-bs-target="#delete-ticket-modal" class="btn btn-danger">
-                                             <i class="bi bi-trash"></i>
-                                        </a>
-                                   </th>
-                                   
-                                   <!-- Modal de confirmación de eliminación -->
-                                   <div class="modal fade " id="delete-ticket-modal" tabindex="-1" aria-labelledby="delete-ticket-modal-label" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                             <div class="modal-content">
-                                                  <div class="modal-header alert alert-dark">
-                                                       <h5 class="modal-title" id="delete-ticket-modal-label">Confirmar elminación de ticket</h5>
-                                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                  </div>
-                                                  <div class="modal-body">
-                                                       ¿Está seguro de que desea eliminar este ticket?
-                                                  </div>
-                                                  <div class="modal-footer bg-secondary">
-                                                       <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
-                                                       <a href="{{ url_for('ticket_blueprint.deleteTicket', ticketId=ticket.id) }}"
-                                                       type="submit" class="btn btn-danger" form="delete-ticket-form">Confirmar</a>
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-
-                              </tr>
+                         {% for user in users %}
+                         {% if user.id == ticket.creator_id %}
+                         <th>
+                              <p>{{user.username}}</p>
+                         </th>
+                         {% endif %}
+                         {% endfor %}
+                         {% for user in users %}
+                         {% if user.id == ticket.assigned_to %}
+                         <th>
+                              <p> {{user.username}} </p>
+                         </th>
+                         {% endif %}
                          {% endfor %}
 
-                    </tbody>
-               </table>
-          </div>
-          <br>
-          
-          <div class="d-flex justify-content-end m-5">
-               <a href="{{ url_for('ticket_blueprint.newTicket') }}" class="btn btn-primary">Nuevo Ticket</a>
-          </div>
-     </body>
+                         <th>
+                              <p>{{ticket.state}}</p>
+                         </th>
+                         <th>
+                              <p>{{ticket.date}}</p>
+                         </th>
+
+                         <th class="{% if admin!='admin' %} d-none {% endif %}">
+                              <a href="{{ url_for('ticket_blueprint.editTicket', ticketId=ticket.id) }}" class="{% if ticket.sysactive == '0' %} disabled {% endif %} btn btn-success">
+                                   <i class="bi bi-pencil"></i>
+                              </a>
+                              <a type="button" data-bs-toggle="modal" data-bs-target="#delete-ticket-modal"
+                                   class="btn btn-danger {% if ticket.sysactive == '0' %} disabled {% endif %}">
+                                   <i class="bi bi-trash"></i>
+                              </a>
+                         </th>
+
+                         <!-- Modal de confirmación de eliminación -->
+                         <div class="modal fade " id="delete-ticket-modal" tabindex="-1"
+                              aria-labelledby="delete-ticket-modal-label" aria-hidden="true">
+                              <div class="modal-dialog">
+                                   <div class="modal-content">
+                                        <div class="modal-header alert alert-dark">
+                                             <h5 class="modal-title" id="delete-ticket-modal-label">Confirmar elminación
+                                                  de ticket</h5>
+                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                  aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                             ¿Está seguro de que desea eliminar este ticket?
+                                        </div>
+                                        <div class="modal-footer bg-secondary">
+                                             <button type="button" class="btn btn-dark"
+                                                  data-bs-dismiss="modal">Cancelar</button>
+                                             <a href="{{ url_for('ticket_blueprint.deleteTicket', ticketId=ticket.id) }}"
+                                                  type="submit" class="btn btn-danger"
+                                                  form="delete-ticket-form">Confirmar</a>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                    </tr>
+                    {% endfor %}
+
+               </tbody>
+          </table>
+     </div>
+     <br>
+
+     <div class="d-flex justify-content-end m-5">
+          <a href="{{ url_for('ticket_blueprint.newTicket') }}" class="btn btn-primary">Nuevo Ticket</a>
+     </div>
+</body>
 {% endblock %}

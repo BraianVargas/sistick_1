@@ -25,7 +25,7 @@ def newTicket():
           else:
                data = request.form.to_dict()
                createTicketController(data)
-               return render_template("ticket/newTicketForm.html", logged = True, admin=session["admin"], users = users)
+               return render_template("ticket/newTicketForm.html", logged = True, admin=session["admin"], users = users,  username=session["username"])
      else:
           return redirect(url_for("user_blueprint.login"))
 
@@ -35,7 +35,7 @@ def editTicket(ticketId):
           if request.method == "GET":
                users = db.session.query(Usuario).all()
                ticket = db.session.query(Ticket).filter_by(id=ticketId).first()
-               return render_template("ticket/edit_ticket.html", logged = True, ticket=ticket, users =users)
+               return render_template("ticket/edit_ticket.html", logged = True, ticket=ticket, users =users, username=session["username"])
           else:
                data = request.form.to_dict()
                editTicketController(data, ticketId)
@@ -48,8 +48,8 @@ def deleteTicket(ticketId):
      if session.get("username") != None:
           try:
                ticket = db.session.query(Ticket).filter_by(id=ticketId).first()
-               # Delete the ticket from the database
-               db.session.delete(ticket)
+               # 'Delete' the ticket from the database
+               
                db.session.commit()
                flash(f"Ticket eliminado correctamente. Id: {ticket.id} ")
                return redirect(url_for("ticket_blueprint.index"))
@@ -65,7 +65,12 @@ def assignedToMe():
     
      tickets = db.session.query(Ticket).filter(
           (Ticket.assigned_to == user.id) & 
-          ((Ticket.state == "abierto") | ((Ticket.state == "cerrado") & (Ticket.date == datetime.datetime.today().date())))
+          (
+               (Ticket.state == "abierto") | (
+                    (Ticket.state == "cerrado") &
+                    (Ticket.date == datetime.datetime.today().date())
+               )
+          )
      ).all()
 
      users = db.session.query(Usuario).all()
