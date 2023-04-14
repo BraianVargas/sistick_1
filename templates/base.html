@@ -18,34 +18,43 @@
      }
      .sidebar {
           background-color: #f1f1f1;
-          width: 50px;
+          width: 5em;
           height: 100%;
           position: fixed;
           left: 0;
           top: 0;
           z-index: 1;
-          padding-top: 1.2em;
+          padding-top: .8em;
           transition: width 0.5s ease;
      }
-     .sidebar .menu .list-group-item{
-          display: none;
+     .sidebar>.menu{
+          padding-top: 2em;
+          margin: auto;
      }
-     .sidebar:hover .menu .list-group-item{
+     .sidebar:hover .menu{
           transition: width 0.8s ease;
           display: block;
      }
-
      .sidebar .menu span{
           display: none;
      }
-     
      .sidebar:hover {
           width: 20%;
      }
-     .sidebar .icons{
+     .sidebar:hover i, .sidebar:hover span{
+          display: inline;
+     }
+     .tickets .list-group-item{
+          transition: width 0.8s ease;
+          padding-left: .5em;
+          width: 2em;
+          margin-left: auto;
+     }
+     .sidebar:hover .tickets .list-group-item{
+          transition: width 0.5s ease;
+          width: 100%;
           display: block;
      }
-        
      @media only screen and (max-width: 767px) {
           .hide {
                display: none;
@@ -56,7 +65,6 @@
           .main{
                margin-left: 250px; 
                width:100%;
-               
                padding: 20px;
           }
           .hidepc {
@@ -147,9 +155,9 @@
      <div class="container-fluid mt-4">
           <div class="row">
                <div class="col-md-3 sidebar bg-dark hide m-auto" tabindex="0">
-                    {% if logged %}
-                    <a class="navbar-brand fs-3 mt-0 link-light" href="/">SisTick</a>
+                    <a class="navbar-brand fs-3 mt-0 pt-0 link-light" href="/">SisTick</a>
                     <br>
+                    {% if logged %}
                     <div class="list-group hide bg-dark menu">
                          <a href="{{url_for('index')}}"
                               class="list-group-item list-group-item-action {% if request.path == url_for('index') %} active {% endif %}">
@@ -159,23 +167,29 @@
                          <a href="{{url_for('user_blueprint.index')}}"
                               class="list-group-item list-group-item-action {% if request.path == url_for('user_blueprint.index') %} active {% endif %}">
                               <i class="bi bi-person-fill"></i>
-                              Usuarios
+                              <span>Usuarios</span>
                          </a>
                          <div class="list-group-item list-group-item-action">
                               <p>
                                    <i class="bi bi-journal-text"></i>
-                                   Tickets
+                                   <span>
+                                        Tickets
+                                   </span>
                               </p>
-                              <div class="list-group">
+                              <div class="list-group tickets">
                                    <a href="{{url_for('ticket_blueprint.index')}}"
                                         class="list-group-item list-group-item-action bg-none {% if request.path == url_for('ticket_blueprint.index') %} active {% endif %}">
                                         <i class="bi bi-list-check"></i>
-                                        Todos
+                                        <span>
+                                             Todos
+                                        </span>
                                    </a>
                                    <a href="{{url_for('ticket_blueprint.assignedToMe')}}"
                                         class="list-group-item list-group-item-action bg-none {% if request.path == url_for('ticket_blueprint.assignedToMe') %} active {% endif %}">
                                         <i class="bi bi-person-check-fill"></i>
-                                        Asignado a mi
+                                        <span>
+                                             Asignado a mi
+                                        </span>
                                    </a>
                               </div>
                          </div>
@@ -184,7 +198,9 @@
                          <a href="{{url_for('user_blueprint.index')}}"
                               class="list-group-item list-group-item-action {% if request.path == url_for('user_blueprint.index') %} active {% endif %}"><i
                                    class="bi bi-graph-up"></i>
-                              Reportes
+                                   <span>
+                                        Reportes
+                                   </span>
                          </a>
                          {% endif %}
                     </div>
