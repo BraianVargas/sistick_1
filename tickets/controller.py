@@ -6,7 +6,7 @@ from tickets.model import Ticket
 from usuarios.model import *
 
 def getAllTicketsController():
-     ticketList = db.session.query(Ticket).all()
+     ticketList = db.session.query(Ticket).order_by(Ticket.id.asc()).limit(5).all()
      
      return ticketList
 
@@ -41,7 +41,10 @@ def editTicketController(requestedData, ticketId):
         ticket.title = requestedData['title']
         ticket.description = requestedData['description']
         ticket.assigned_to = requestedData['assigned_to']
+        ticket.lastmodif = datetime.datetime.today()
         ticket.state = requestedData['state']
+        if (ticket.state.lower() == "cerrado"):
+             ticket.sysactive = '0'
 
         # Guardar los cambios en la base de datos
         db.session.commit()

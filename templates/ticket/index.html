@@ -22,7 +22,12 @@
      </div>
      {% endif %}
      {% endwith %}
+
+
      <div class="container">
+          <div class="d-flex justify-content-left">
+               <a href="{{ url_for('ticket_blueprint.newTicket') }}" class="btn btn-primary">Nuevo Ticket</a>
+          </div>
           <h1 class="d-flex justify-content-center mb-3">Todos los Tickets</h1>
           <table class="table table-striped">
                <thead>
@@ -50,7 +55,8 @@
 
                <tbody>
                     <!-- Aquí se generará dinámicamente la lista de tickets pendientes -->
-                    {% for ticket in data %}
+                    {% for ticket in data|reverse %}
+
                     <tr class="
                                    {% if ticket.sysactive == '0' %} deleted {% endif %}
                                    {% if ticket.state.lower() == 'cerrado' %} table-danger {% else %} table-success {% endif %}
@@ -131,8 +137,5 @@
      </div>
      <br>
 
-     <div class="d-flex justify-content-end m-5">
-          <a href="{{ url_for('ticket_blueprint.newTicket') }}" class="btn btn-primary">Nuevo Ticket</a>
-     </div>
 </body>
 {% endblock %}
