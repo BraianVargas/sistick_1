@@ -6,7 +6,7 @@ from tickets.model import Ticket
 from usuarios.model import *
 
 def getAllTicketsController():
-     ticketList = db.session.query(Ticket).order_by(Ticket.id.asc()).limit(5).all()
+     ticketList = db.session.query(Ticket).order_by(Ticket.id.asc()).limit(3).all()
      
      return ticketList
 

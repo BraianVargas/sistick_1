@@ -10,9 +10,26 @@ from tickets.controller import *
 
 @ticketsBP.route("/index", methods=["GET"])
 def index():
+     users = db.session.query(Usuario).order_by(Usuario.id.desc()).all()   
      data = getAllTicketsController()
-     users = db.session.query(Usuario).order_by(Usuario.id.desc()).all()
-     return render_template("ticket/index.html", data = data, admin=session["admin"], users = users, username = session["username"])
+     total = len(data)
+     overflow = 10
+     total_pages = ((total*1)/overflow)
+     
+     print(total_pages)
+     print(total)
+     print(overflow)
+     if int(total_pages) > 0 and int(total_pages) < 1:
+          total_pages = 1
+     
+     return render_template(
+          "ticket/index.html", 
+          data = data,
+          admin=session["admin"],
+          users = users,
+          username = session["username"],
+          totalPages = int(total_pages)
+     )
 
 @ticketsBP.route("/newTicket",methods=["GET","POST"])
 def newTicket():
