@@ -12,6 +12,7 @@ class Ticket(db.Model):
      assigned_to = db.Column(db.String, nullable=False)
      state = db.Column(db.String, nullable=False)
      date = db.Column(db.String, nullable=False)
+     lastmodif = db.Column(db.String, nullable=False)
      sysactive = db.Column(db.String, nullable=False)
 
 

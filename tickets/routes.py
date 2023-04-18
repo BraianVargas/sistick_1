@@ -62,13 +62,16 @@ def deleteTicket(ticketId):
 @ticketsBP.route("/assigned", methods = ["GET","POST"])
 def assignedToMe():
      user = db.session.query(Usuario).filter_by(username=session["username"]).first()
-    
+     today =  datetime.datetime.today().date()
+
      tickets = db.session.query(Ticket).filter(
+
           (Ticket.assigned_to == user.id) & 
           (
                (Ticket.state == "abierto") | (
                     (Ticket.state == "cerrado") &
-                    (Ticket.date == datetime.datetime.today().date())
+                    ((str(Ticket.date).split(' '))[0] == (str(today).split(' '))[0]) &
+                    ((str(Ticket.lastmodif).split(' '))[0] == str(today))
                )
           )
      ).all()
