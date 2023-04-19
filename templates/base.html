@@ -74,6 +74,8 @@
                min-height: 50px;
           }
      }
+
+     
 </style>
 
 <body>
@@ -86,7 +88,7 @@
                     <i class="bi bi-list bg-light"></i>
                </button>
                <div class="collapse nav navbar-collapse" id="navbarNav">
-                    {% if logged %}
+                    {% if 'username' in session %}
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                          <div class="hidepc">
                               <li class="nav-item">
@@ -157,7 +159,7 @@
                <div class="col-md-3 sidebar bg-dark hide m-auto" tabindex="0">
                     <a class="navbar-brand fs-3 mt-0 pt-0 link-light" href="/">SisTick</a>
                     <br>
-                    {% if logged %}
+                    {% if 'username' in session %}
                     <div class="list-group hide bg-dark menu">
                          <a href="{{url_for('index')}}"
                               class="list-group-item list-group-item-action {% if request.path == url_for('index') %} active {% endif %}">
@@ -222,16 +224,16 @@
                               {% block content %}{% endblock %}
                          </div>
                     {% else %}
-                         {% if logged %}
-                              <div class="main">
+                         {% if 'username' in session %}
+                              <div class="{% if 'username' in session %} main {% endif %}">
                                    <h4>Bienvenido al dashboard de administrador</h4>
                                    <p>Desde aquí podrás gestionar a los usuarios, tickets y reportes de la plataforma.</p>
                               </div>
                          {% else %}
-                         
-                              <div class="text-dark pt-5">
-                                   <h4>Bienvenido al SisTick</h4>
+                              <div class="text-dark pt-5 d-flex justify-content-center">
                                    <p>
+                                        <h4>Bienvenido al SisTick</h4>
+                                        <br>
                                         Sistema de gestion de tickets.
                                         <br>
                                         Inicie sesion para continuar.

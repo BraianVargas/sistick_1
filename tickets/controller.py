@@ -1,4 +1,5 @@
 from flask import *
+from flask_sqlalchemy import pagination
 import datetime
 
 from extensions import db
@@ -6,9 +7,8 @@ from tickets.model import Ticket
 from usuarios.model import *
 
 def getAllTicketsController():
-     ticketList = db.session.query(Ticket).all()
-     
-     return ticketList
+     page = db.paginate((db.select(Ticket).order_by(Ticket.id.asc())))
+     return page
 
 def createTicketController(data):
      try:
@@ -33,21 +33,24 @@ def createTicketController(data):
           return redirect(url_for("ticket_blueprint.newTicket"))
 
 def editTicketController(requestedData, ticketId):
-    try:
-        # Obtener el ticket a editar
-        ticket = db.session.query(Ticket).filter_by(id=ticketId).first()
+     try:
+          # Obtener el ticket a editar
+          ticket = db.session.query(Ticket).filter_by(id=ticketId).first()
 
-        # Actualizar los campos del ticket con los datos enviados en el formulario
-        ticket.title = requestedData['title']
-        ticket.description = requestedData['description']
-        ticket.assigned_to = requestedData['assigned_to']
-        ticket.state = requestedData['state']
+          # Actualizar los campos del ticket con los datos enviados en el formulario
+          ticket.title = requestedData['title']
+          ticket.description = requestedData['description']
+          ticket.assigned_to = requestedData['assigned_to']
+          ticket.lastmodif = datetime.datetime.today()
+          ticket.state = requestedData['state']
+          if (ticket.state.lower() == "cerrado"):
+               ticket.sysactive = '0'
 
-        # Guardar los cambios en la base de datos
-        db.session.commit()
-        flash(f"Ticket actualizado correctamente. Id: {ticket.id} ")
-        return 
-    except Exception as e:
-        flash(f"Error en actualización de ticket. \n {e}")
-        return 
+          # Guardar los cambios en la base de datos
+          db.session.commit()
+          flash(f"Ticket actualizado correctamente. Id: {ticket.id} ")
+          return 
+     except Exception as e:
+          flash(f"Error en actualización de ticket. \n {e}")
+          return 
 

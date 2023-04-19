@@ -22,7 +22,12 @@
      </div>
      {% endif %}
      {% endwith %}
+
+
      <div class="container">
+          <div class="d-flex justify-content-left">
+               <a href="{{ url_for('ticket_blueprint.newTicket') }}" class="btn btn-primary">Nuevo Ticket</a>
+          </div>
           <h1 class="d-flex justify-content-center mb-3">Todos los Tickets</h1>
           <table class="table table-striped">
                <thead>
@@ -47,10 +52,10 @@
                          <th class="{% if admin!='admin' %} d-none {% endif %}"></th>
                     </tr>
                </thead>
-
                <tbody>
                     <!-- Aquí se generará dinámicamente la lista de tickets pendientes -->
-                    {% for ticket in data %}
+                    {% for ticket in data|reverse %}
+
                     <tr class="
                                    {% if ticket.sysactive == '0' %} deleted {% endif %}
                                    {% if ticket.state.lower() == 'cerrado' %} table-danger {% else %} table-success {% endif %}
@@ -89,7 +94,8 @@
                          </th>
 
                          <th class="{% if admin!='admin' %} d-none {% endif %}">
-                              <a href="{{ url_for('ticket_blueprint.editTicket', ticketId=ticket.id) }}" class="{% if ticket.sysactive == '0' %} disabled {% endif %} btn btn-success">
+                              <a href="{{ url_for('ticket_blueprint.editTicket', ticketId=ticket.id) }}"
+                                   class="{% if ticket.sysactive == '0' %} disabled {% endif %} btn btn-success">
                                    <i class="bi bi-pencil"></i>
                               </a>
                               <a type="button" data-bs-toggle="modal" data-bs-target="#delete-ticket-modal"
@@ -128,11 +134,31 @@
 
                </tbody>
           </table>
+          </div>
+          <div class="container m-auto">
+               <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                         <li class="page-item">
+                              <a class="page-link" href="#" aria-label="Previous">
+                                   <span aria-hidden="true">&laquo;</span>
+                              </a>
+                         </li>
+                         <li class="page-item"><a class="page-link" href="#"><</a></li>
+                         {% for page in cant_pages %}
+                              <li class="page-item"><a class="page-link" href="#"> {{ page }} </a></li>
+                         {% endfor %}
+
+                         <li class="page-item"><a class="page-link" href="#">></a></li>
+                         <li class="page-item">
+                              <a class="page-link" href="#" aria-label="Previous">
+                                   <span aria-hidden="true">&raquo;</span>
+                              </a>
+                         </li>
+                    </ul>
+               </nav>
+          </div>
      </div>
      <br>
 
-     <div class="d-flex justify-content-end m-5">
-          <a href="{{ url_for('ticket_blueprint.newTicket') }}" class="btn btn-primary">Nuevo Ticket</a>
-     </div>
 </body>
 {% endblock %}
