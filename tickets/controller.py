@@ -1,5 +1,4 @@
 from flask import *
-from flask_sqlalchemy import pagination
 import datetime
 
 from extensions import db
@@ -7,8 +6,8 @@ from tickets.model import Ticket
 from usuarios.model import *
 
 def getAllTicketsController():
-     page = db.paginate((db.select(Ticket).order_by(Ticket.id.asc())))
-     return page
+     tickets = db.paginate((db.select(Ticket).order_by(Ticket.id.asc())), per_page=20)
+     return tickets
 
 def createTicketController(data):
      try:

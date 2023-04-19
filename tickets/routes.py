@@ -13,20 +13,14 @@ def index():
      users = db.session.query(Usuario).order_by(Usuario.id.desc()).all()   
      data = getAllTicketsController()
 
-     print(data.pages)
-     print(data.has_prev)
-     print(data.has_next)
-
-     for d in data:
-          print(d)
-
      return render_template(
           "ticket/index.html", 
           data = data,
           admin=session["admin"],
           users = users,
           username = session["username"],
-          pages = data
+          pagination = data,
+          endpoint = "ticket_blueprint.index"
      )
 
 @ticketsBP.route("/newTicket",methods=["GET","POST"])

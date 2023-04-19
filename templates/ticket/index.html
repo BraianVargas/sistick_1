@@ -105,60 +105,65 @@
                          </th>
 
                          <!-- Modal de confirmación de eliminación -->
-                         <div class="modal fade " id="delete-ticket-modal" tabindex="-1"
-                              aria-labelledby="delete-ticket-modal-label" aria-hidden="true">
-                              <div class="modal-dialog">
-                                   <div class="modal-content">
-                                        <div class="modal-header alert alert-dark">
-                                             <h5 class="modal-title" id="delete-ticket-modal-label">Confirmar elminación
-                                                  de ticket</h5>
-                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                  aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                             ¿Está seguro de que desea eliminar este ticket?
-                                        </div>
-                                        <div class="modal-footer bg-secondary">
-                                             <button type="button" class="btn btn-dark"
-                                                  data-bs-dismiss="modal">Cancelar</button>
-                                             <a href="{{ url_for('ticket_blueprint.deleteTicket', ticketId=ticket.id) }}"
-                                                  type="submit" class="btn btn-danger"
-                                                  form="delete-ticket-form">Confirmar</a>
+                              <div class="modal fade " id="delete-ticket-modal" tabindex="-1"
+                                   aria-labelledby="delete-ticket-modal-label" aria-hidden="true">
+                                   <div class="modal-dialog">
+                                        <div class="modal-content">
+                                             <div class="modal-header alert alert-dark">
+                                                  <h5 class="modal-title" id="delete-ticket-modal-label">Confirmar elminación
+                                                       de ticket</h5>
+                                                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                       aria-label="Close"></button>
+                                             </div>
+                                             <div class="modal-body">
+                                                  ¿Está seguro de que desea eliminar este ticket?
+                                             </div>
+                                             <div class="modal-footer bg-secondary">
+                                                  <button type="button" class="btn btn-dark"
+                                                       data-bs-dismiss="modal">Cancelar</button>
+                                                  <a href="{{ url_for('ticket_blueprint.deleteTicket', ticketId=ticket.id) }}"
+                                                       type="submit" class="btn btn-danger"
+                                                       form="delete-ticket-form">Confirmar</a>
+                                             </div>
                                         </div>
                                    </div>
                               </div>
-                         </div>
 
-                    </tr>
+                         </tr>
                     {% endfor %}
 
                </tbody>
           </table>
-          </div>
-          <div class="container m-auto">
-               <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                         <li class="page-item">
-                              <a class="page-link" href="#" aria-label="Previous">
-                                   <span aria-hidden="true">&laquo;</span>
-                              </a>
-                         </li>
-                         <li class="page-item"><a class="page-link" href="#"><</a></li>
-                         {% for page in cant_pages %}
-                              <li class="page-item"><a class="page-link" href="#"> {{ page }} </a></li>
-                         {% endfor %}
-
-                         <li class="page-item"><a class="page-link" href="#">></a></li>
-                         <li class="page-item">
-                              <a class="page-link" href="#" aria-label="Previous">
-                                   <span aria-hidden="true">&raquo;</span>
-                              </a>
-                         </li>
-                    </ul>
-               </nav>
-          </div>
      </div>
-     <br>
+     <div class=" container">
+          <nav aria-label="page navigation example">
+               <ul class="pagination">
+                    
+                    <li class="page-item">
+                         <a class="page-link {% if not data.has_prev %} disabled {% endif %}" href="{{ url_for(endpoint, page=1) }}">&laquo;</a>
+                    </li>
+                    <li class="page-item">
+                         <a class="page-link {% if not data.has_prev %} disabled {% endif %}" href="{{ url_for(endpoint, page=data.prev_num) }}">&lt;</a>
+                    </li>
+                    {% for page in data.iter_pages() %}
+                    {% if page %}
+                         <li class="page-item {% if page == data.page %} active {% endif %}">
+                              <a class="page-link" href="{{ url_for(endpoint, page=page) }}">{{ page }}</a>
+                         </li>
+                    {% else %}
+                         <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+                    {% endif %}
+                    {% endfor %}
+                    <li class="page-item">
+                    <a class="page-link {% if not data.has_next %} disabled {% endif %}" href="{{ url_for(endpoint, page=data.next_num) }}">&gt;</a>
+                    </li>
+                    <li class="page-item">
+                         <a class="page-link {% if not data.has_next %} disabled {% endif %}" href="{{ url_for(endpoint, page=data.pages) }}">&raquo;</a>
+                     </li>
+                     
+               </ul>
+          </nav>
+     </div>
 
 </body>
 {% endblock %}
