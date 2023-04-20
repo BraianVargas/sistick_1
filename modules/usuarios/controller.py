@@ -3,7 +3,7 @@ from sqlalchemy import *
 from flask import *
 
 from extensions import db
-from usuarios.model import *
+from modules.usuarios.model import *
 
 def createUserController(requestedData):
      try:

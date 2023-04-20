@@ -1,9 +1,9 @@
 from flask import request, render_template, redirect, url_for, session
 import werkzeug
 
-from usuarios import userBP
-from usuarios.model import Usuario
-from usuarios.controller import *
+from modules.usuarios import userBP
+from modules.usuarios.model import Usuario
+from modules.usuarios.controller import *
 
 
 @userBP.route("/")

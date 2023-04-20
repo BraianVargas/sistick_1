@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 # Importación de módulos propios
 from extensions import db
-from usuarios import userBP
-from tickets import ticketsBP
+from modules.usuarios import userBP
+from modules.tickets import ticketsBP
 
 app = Flask(__name__,template_folder='templates')
 app.config.from_pyfile("data/config.py")

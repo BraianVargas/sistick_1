@@ -3,8 +3,8 @@ import datetime
 from sqlalchemy import func, DateTime, Time
 
 
-from tickets import ticketsBP
-from tickets.controller import *
+from modules.tickets import ticketsBP
+from modules.tickets.controller import *
 
 
 
