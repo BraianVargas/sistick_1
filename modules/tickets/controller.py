@@ -4,6 +4,8 @@ import datetime
 from extensions import db
 from modules.tickets.model import Ticket
 from modules.usuarios.model import *
+from modules.historical.controller import *
+
 
 def getAllTicketsController():
      tickets = db.paginate((db.select(Ticket).order_by(Ticket.id.desc()).limit(200)), per_page=10)
@@ -24,6 +26,7 @@ def createTicketController(data):
           )
           db.session.add(ticket)
           db.session.commit()
+          createRegister("Create",f"Creación de ticket {ticket.id}")
 
           flash("Ticket cargado correctamente")
           return redirect(url_for("ticket_blueprint.index"))
@@ -47,6 +50,8 @@ def editTicketController(requestedData, ticketId):
 
           # Guardar los cambios en la base de datos
           db.session.commit()
+          createRegister("Edit", f"Ticket {ticket.id}. User: {session['username']}")
+
           flash(f"Ticket actualizado correctamente. Id: {ticket.id} ")
           return 
      except Exception as e:

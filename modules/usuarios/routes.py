@@ -4,6 +4,7 @@ import werkzeug
 from modules.usuarios import userBP
 from modules.usuarios.model import Usuario
 from modules.usuarios.controller import *
+from modules.historical.controller import *
 
 
 @userBP.route("/")
@@ -17,10 +18,8 @@ def login():
      if request.method == 'POST':
           status = checkLoginController(request.form.to_dict())
           if status == True:
-               if (db.session.query(Usuario).filter_by(username = session["username"]).first()).admin == "admin":
-                    return redirect(url_for("ticket_blueprint.assignedToMe"))
-               else:
-                    return redirect(url_for("ticket_blueprint.assignedToMe"))
+               createRegister("Login",f"User: {session['username']}")
+               return redirect(url_for("ticket_blueprint.assignedToMe"))
           else:
                return render_template("user/LoginForm.html", error=status)
      else:
@@ -60,5 +59,6 @@ def getAllUsers():
 
 @userBP.route("/logout", methods = ["GET","POST"])
 def logout():
+     createRegister("Logout",f"User: {session['username']}")
      session.pop("username")
      return redirect(url_for("user_blueprint.login"))

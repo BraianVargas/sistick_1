@@ -4,6 +4,7 @@ from flask import *
 
 from extensions import db
 from modules.usuarios.model import *
+from modules.historical.controller import *
 
 def createUserController(requestedData):
      try:
@@ -18,7 +19,11 @@ def createUserController(requestedData):
           )
           db.session.add(user)
           db.session.commit()
+          createRegister("Create", f"Create User Profile. User: {user.username}")
+
+          # ---- MODIFICAR: enviar al dashboard
           return redirect(url_for('user_blueprint.login'))
+          # ---- !!!!!!!!!!!!!
      except Exception as e:
           return f"Error. createUserController. -> \n {e}"
      
@@ -27,6 +32,7 @@ def getUsersController():
      usersList = db.session.query(Usuario).all()
      for user in usersList:
           data.append(user.toJson())
+     createRegister("Consult", f"Consult to profile. User: {user.username}")
      return data
 
 def checkLoginController(dataJson):

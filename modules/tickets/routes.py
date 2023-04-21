@@ -7,7 +7,6 @@ from modules.tickets import ticketsBP
 from modules.tickets.controller import *
 
 
-
 @ticketsBP.route("/index", methods=["GET"])
 def index():
      users = db.session.query(Usuario).order_by(Usuario.id.desc()).all()   
@@ -49,7 +48,7 @@ def deleteTicket(ticketId):
      try:
           ticket = db.session.query(Ticket).filter_by(id=ticketId).first()
           # 'Delete' the ticket from the database
-          
+          # Here we set the ticket in the current status and 
           db.session.commit()
           flash(f"Ticket eliminado correctamente. Id: {ticket.id} ")
           return redirect(url_for("ticket_blueprint.index"))
@@ -57,6 +56,13 @@ def deleteTicket(ticketId):
           flash(f"Error en actualización de ticket. \n {e}")
           return
      
+
+
+# ---- Assigned to user
+# ---- This should show the tickets that are:
+#         * Tickets "Closed" on the day of the current date
+#         * All "Open" tickets
+#         * All tickets "in progress"
 @ticketsBP.route("/assigned", methods = ["GET","POST"])
 def assignedToMe():
      user = db.session.query(Usuario).filter_by(username=session["username"]).first()
