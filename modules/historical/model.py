@@ -2,8 +2,8 @@ import datetime
 
 from extensions import db
 
-class Historical(db.Model):
-     __tablename__ = 'historical'
+class LogHistorica(db.Model):
+     __tablename__ = 'log_historial'
      id = db.Column(db.Integer, primary_key = True, nullable = False)
      user_id = db.Column(db.Integer,nullable = False)
      action = db.Column(db.String,nullable = False)
@@ -17,7 +17,7 @@ class Historical(db.Model):
           self.date = date
 
      def __str__(self):
-          return f'Historical({self.toJson()})'
+          return f'log_historial({self.toJson()})'
 
      def toJson(self):
           d = dict(

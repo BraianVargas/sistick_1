@@ -59,6 +59,10 @@ def getAllUsers():
 
 @userBP.route("/logout", methods = ["GET","POST"])
 def logout():
-     createRegister("Logout",f"User: {session['username']}")
+     # createRegister("Logout",f"User: {session['username']}")
      session.pop("username")
      return redirect(url_for("user_blueprint.login"))
+
+@userBP.route("/user_dashboard", methods = ["GET", "POST"])
+def indexUserDashboard():
+     return render_template("user/dashboard_user.html", logged=True, username = session["username"])

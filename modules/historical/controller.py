@@ -2,13 +2,13 @@ from flask import *
 import datetime
 
 from extensions import db
-from modules.historical.model import Historical
+from modules.historical.model import LogHistorica
 from modules.usuarios.model import *
 
 def createRegister(action, detail):
      try:
           user = db.session.query(Usuario).filter_by(username = session["username"]).first()
-          registro = Historical(user.id, action, detail, datetime.datetime.now())
+          registro = LogHistorica(user.id, action, detail, datetime.datetime.now())
           db.session.add(registro)
           db.session.commit()
           return
