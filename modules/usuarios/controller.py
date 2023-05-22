@@ -32,8 +32,19 @@ def getUsersController():
      usersList = db.session.query(Usuario).all()
      for user in usersList:
           data.append(user.toJson())
-     createRegister("Consult", f"Consult to profile. User: {user.username}")
      return data
+
+def getAllUsersToDashboard():
+     data = []
+     loginReg = []
+     usersList = db.session.query(Usuario).all()
+
+     for user in usersList:
+          reg = db.session.query(LogHistorica).filter_by(user_id = user.id, action = "Login").first()
+          data.append(user)
+          loginReg.append(reg)
+
+     return data, loginReg
 
 def checkLoginController(dataJson):
      user = db.session.query(Usuario).filter_by(username=dataJson["username"]).first()
@@ -46,3 +57,19 @@ def checkLoginController(dataJson):
           session["admin"]=user.admin
           return True
      
+def activateUser(userId, option):
+     # Aquí puedes realizar la lógica para desactivar el usuario con el ID proporcionado
+     if option == "Activar":
+          user = db.session.query(Usuario).filter_by(id = userId).first()
+          user.sysactive = 1
+          session.add(user)
+          session.commit()
+     elif option == "Desactivar":
+          user = db.session.query(Usuario).filter_by(id = userId).first()
+          user.sysactive = 0
+          session.add(user)
+          session.commit()
+     else:
+          raise TypeError(f"Error in activateUser. Error 960. Unknowed Option: {option}")
+
+         

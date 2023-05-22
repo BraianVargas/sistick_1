@@ -1,69 +1,114 @@
 {% extends "base.html" %}
-{% block title %} Inicio {% endblock %}
+{% block title %} Dashboard de usuario {% endblock %}
 {% block content %}
-<style>
-     .form-details{
-          border: 2px solid;
-          border-radius: 15px;
-          padding: 2em;
-     }
-</style>
+<head>
+     <style>
+          table {
+               width: 100%;
+          }
+          tr:first-child{
+               border: solid 2px black;
+               border-radius: 10px;
+          }
+     
+          th, td {
+               text-align: left;
+               padding: 8px;
+          }
+     
+          tr:nth-child(even){
+               background-color: white;
+          }
+          
+          th {
+               background-color: var(--dark-mid-bg);
+               opacity: .8;
+               color: white;
+          }
+     
+          input[type=text] {
+               width: 80%;
+               border: 1px black solid;
+               padding: 12px 20px;
+               margin: 8px 0;
+               box-sizing: border-box;
+               border: none;
+               border-radius: 10px;
+          }
+     
+          button {
+               background-color: var(--btn-bg);
+               color: white;
+               padding: 12px 20px;
+               border: none;
+               cursor: pointer;
+               border-radius: 15px;
+               border: solid 2px black;
+          }
+     
+          button:hover {
+               background-color:  var(--hover-bg);
+               transition: background-color .4s ease;
+          }
+     </style>
+ </head>
+ <body>
+     <h1>Dashboard de Usuarios</h1>
+     <div class="d-block m-auto">
+          <input style="border:2px solid black;" type="text" id="search-box" placeholder="Buscar usuarios..." onkeyup="searchUsers()">
+          <button style="border:2px solid black;" class="W-20" type="submit" onclick="searchUsers()">
+               <i class="bi bi-search"></i>
+          </button>
+     </div>
+     <table id="users-table">
+         <tr>
+             <th>Nombre</th>
+             <th>Tipo de Usuario</th>
+             <th>Último Login</th>
+             <th>Acciones</th>
+         </tr>
+         {% for user in users %}
+          <tr>
+               <td class="text-black">{{ user['username'].capitalize() }}</td>
+               <td class="text-black">{{ user['admin'].capitalize() }}</td>
+               <td class="text-black">
+                    {% for log in logs %}
+                         {% if (user.id == log.user_id)%}
+                              {{ log.date }}
+                         {% endif %}
+                    {% endfor %}
+               </td>
+               <td>
+                    {% if user['sysactive'] == '0' %}
+                         <button onclick="{{url_for('static')}}">Activar</button>
+                    {% else %}     
+                         <button onclick="">Desactivar</button>
+                    {% endif %}
+               </td>
+          </tr>
+         {% endfor %}
+     </table>
+     <script>
+         function searchUsers() {
+             var input, filter, table, tr, td, i, txtValue;
+             input = document.getElementById("search-box");
+             filter = input.value.toUpperCase();
+             table = document.getElementById("users-table");
+             tr = table.getElementsByTagName("tr");
+             for (i = 0; i < tr.length; i++) {
+                 td = tr[i].getElementsByTagName("td")[0];
+                 if (td) {
+                     txtValue = td.textContent || td.innerText;
+                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                         tr[i].style.display = "";
+                     } else {
+                         tr[i].style.display = "none";
+                     }
+                 }
+             }
+         }
+ 
+     </script>
+ </body>
 
-<body>
-     <h2 class="text-center p-3"> Panel de usuario </h2>
-     <!-- Create User -->
-     <section id="createUsers">
-          <div class="container">
-               <div class="row">
-                    <div class="col-12 col-md-6 form-details">
-                         <h2 class="text-left"> Crear Usuario </h2>
-                         <form class="m-auto w-80" action="/user/create" method="POST">
-						<div class="form-floating mb-3">
-							<input type="text" name="username" class="form-control" id="inputNombre"
-								placeholder="Introduce tu nombre" required>
-							<label for="inputNombre" class="form-label">Nombre</label>
-						</div>
-						<div class="form-floating mb-3">
-							<input type="email" name="email" class="form-control" id="inputEmail"
-								placeholder="Introduce tu correo electrónico" required>
-							<label for="inputEmail" class="form-label">Correo electrónico</label>
-						</div>
-						<div class="form-floating mb-3">
-							<input type="password" name="password" class="form-control" id="inputPassword"
-								placeholder="Introduce tu contraseña" required>
-							<label for="inputPassword" class="form-label">Contraseña</label>
-						</div>
-						<div class="form-group mb-3">
-							<label for="isadmin">¿Es Administrador?</label>
-							<input type="checkbox" class="" name="isadmin" id="isadmin"
-								placeholder="¿Es Administrador?">
-						</div>
-						<button type="submit" class="btn btn-primary btn-block">Enviar</button>
-					</form>
-                    </div>
-     <!-- Edit User Profile -->
-                    <div class="col-12 col-md-6 form-details">
-                         <h2 class="text-left"> Editar Usuario </h2>
-                         
-                    </div>
-               </div>
-          </div>
-     </section>
-     <!-- Delete User -->
-          <section id="createUsers">
-               <div class="container">
-                    <div class="row">
-                         <div class="col-12 col-md-6 form-details">
-                              <h2 class="text-left"> Eliminar Usuario </h2>
-                              
-                         </div>
-                         <div class="col-12 col-md-6 form-details">
-                              <h2 class="text-left"> Eliminar Usuario </h2>
-                              
-                         </div>
-                    </div>
-               </div>
-          </section>
-
-</body>
 {% endblock %}
