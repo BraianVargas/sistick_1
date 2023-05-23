@@ -59,17 +59,18 @@ def checkLoginController(dataJson):
      
 def activateUser(userId, option):
      # Aquí puedes realizar la lógica para desactivar el usuario con el ID proporcionado
-     if option == "Activar":
+     if option == 1:
           user = db.session.query(Usuario).filter_by(id = userId).first()
-          user.sysactive = 1
-          session.add(user)
-          session.commit()
-     elif option == "Desactivar":
+          user.sysactive = '1'
+          db.session.add(user)
+          db.session.commit()
+          return
+     elif option == 0:
           user = db.session.query(Usuario).filter_by(id = userId).first()
-          user.sysactive = 0
-          session.add(user)
-          session.commit()
+          user.sysactive = '0'
+          db.session.add(user)
+          db.session.commit()
+          return
      else:
           raise TypeError(f"Error in activateUser. Error 960. Unknowed Option: {option}")
 
-         

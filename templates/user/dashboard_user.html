@@ -45,6 +45,20 @@
                border-radius: 15px;
                border: solid 2px black;
           }
+          .button {
+               background-color: var(--btn-bg);
+               color: white;
+               padding: 12px 20px;
+               border: none;
+               cursor: pointer;
+               border-radius: 15px;
+               border: solid 2px black;
+          }
+     
+          .button:hover {
+               background-color:  var(--hover-bg);
+               transition: background-color .4s ease;
+          }
      
           button:hover {
                background-color:  var(--hover-bg);
@@ -80,9 +94,9 @@
                </td>
                <td>
                     {% if user['sysactive'] == '0' %}
-                         <button onclick="{{url_for('static')}}">Activar</button>
-                    {% else %}     
-                         <button onclick="">Desactivar</button>
+                         <a class="button" href="{{url_for('user_blueprint.activateUserRoute', userId = user.id, option = 1)}}">Activar</a>
+                    {% else %}
+                         <a class="button" href="{{url_for('user_blueprint.activateUserRoute', userId = user.id, option = 0)}}">Desactivar</a>
                     {% endif %}
                </td>
           </tr>
@@ -107,7 +121,6 @@
                  }
              }
          }
- 
      </script>
  </body>
 

@@ -67,3 +67,8 @@ def logout():
 def indexUserDashboard():
      users, loginReg = getAllUsersToDashboard()
      return render_template("user/dashboard_user.html", logged=True, username = session["username"], admin = session['admin'], users = users, logs=loginReg)
+
+@userBP.route("/activate/<int:userId>/<int:option>", methods=["GET","POST"])
+def activateUserRoute(userId,option):
+     activateUser(userId, option)
+     return redirect(url_for("user_blueprint.indexUserDashboard"))
