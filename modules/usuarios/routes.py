@@ -11,10 +11,23 @@ from modules.historical.controller import *
 def index():
      return "Index User"
 
+
+@userBP.route("/edit/<int:userId>", methods=["GET","POST"])
+def editUser(userId):
+     if request.method == "GET":
+          user = db.session.query(Usuario).filter_by(id=userId).first()
+          return render_template("user/edit_user.html",  logged=True, username = session["username"], admin = session['admin'], user = user)
+     else:
+          data = request.form.to_dict()
+          editUserController(data, userId)
+          return redirect(url_for("user_blueprint.index"))
+
+
 # Login route. This get the data entry from the login form 
 # and validate the user for the access to the app
 @userBP.route("/login", methods = ['GET','POST'])
 def login():
+     print(request.method)
      if request.method == 'POST':
           status = checkLoginController(request.form.to_dict())
           if status == True:
@@ -40,7 +53,7 @@ def createUser():
                     statusMessage = createUserController(data)
                     return statusMessage
                else:
-                    return render_template("user/registerForm.html")
+                    return render_template("user/registerForm.html", logged=True, username = session["username"], admin = session['admin'])
           else:
                return redirect(url_for("ticket_blueprint.index"))
      else:

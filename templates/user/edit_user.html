@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %} Sistick - Editar usuario {% endblock %}
+{% block content %}
+<style>
+     button {
+          background-color: var(--btn-bg);
+          color: white;
+          padding: 12px 20px;
+          border: none;
+          cursor: pointer;
+          border-radius: 15px;
+          border: solid 2px black;
+     }
+
+     .button {
+          margin: .5em;
+          background-color: var(--btn-bg);
+          color: white;
+          padding: 12px 20px;
+          border: none;
+          cursor: pointer;
+          border-radius: 1em;
+          border: solid 2px black;
+          text-decoration: none;
+     }
+
+     .button:hover {
+          color: white;
+          border: solid 2px black;
+          background-color: var(--hover-bg);
+          transition: background-color .4s ease;
+     }
+
+     button:hover {
+          color: white;
+          border: solid 2px black;
+          background-color: var(--hover-bg);
+          transition: background-color .4s ease;
+     }
+</style>
+<body>
+     <form class="w-80 m-auto" action="/user/edit/{{user['id']}}" method="POST">
+          <div class="form-floating mb-3">
+               <input type="text" name="username" class="form-control" id="inputNombre"
+                    placeholder="Introduce tu nombre" value="{{user['username']}}" required>
+               <label for="inputNombre" class="form-label">Nombre</label>
+          </div>
+          <div class="form-floating mb-3">
+               <input type="email" name="email" class="form-control" id="inputEmail"
+                    placeholder="Introduce tu correo electrónico" value="{{user['email']}}" required>
+               <label for="inputEmail" class="form-label">Correo electrónico</label>
+          </div>
+          <div class=" input-group form-floating mb-3">
+               <input type="text" name="password" class="form-control" id="inputPassword"
+                    placeholder="Introduce tu contraseña" value="{{user['password']}}" required>
+               <label for="inputPassword" class="form-label">Contraseña</label>
+               <span id="password-toggle-btn" class="input-group-text" onclick="togglePasswordVisibility()"><i class="bi bi-eye"></i></span>
+               
+          </div>
+          <button type="submit" class="btn button fs-5">Guardar</button>
+     </form>
+</body>
+
+
+     <script>
+          function togglePasswordVisibility() {
+               var passwordInput = document.getElementById("inputPassword");
+               console.log(passwordInput);
+               var toggleBtn = document.querySelector("#password-toggle-btn");
+
+               if (passwordInput.getAttribute("type") === "password") {
+                    passwordInput.setAttribute("type", "text");
+                    toggleBtn.innerHTML = '<i class="bi bi-eye-slash"></i>';
+               } else {
+                    passwordInput.setAttribute("type", "password");
+                    toggleBtn.innerHTML = '<i class="bi bi-eye"></i>';
+               }
+          }
+     </script>
+{% endblock %}

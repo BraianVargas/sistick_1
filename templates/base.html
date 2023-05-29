@@ -14,13 +14,19 @@
           --secondary-bg:#92b395 ;
           --link-active: #726c81;
           --dark-mid-bg: #565164;
-          --dark-bg: #392a35;
+          --dark-bg: #240135;
           --btn-bg: #78a890;
-          --hover-bg: #a2a9af;
+          --hover-bg: #0c406d;
      }
 
 
-     
+     .modal-body{
+          background-color: var(--secondary-bg);
+     }
+     .modal-header,.modal-footer{
+          color: white;
+          background-color: var(--dark-bg);
+     }
      .dark-bg{
           background-color: var(--dark-bg);
      }
@@ -85,7 +91,7 @@
           .main{
                margin-left: 180px; 
                width:100%;
-               z-index: 0;
+               z-index: 1;
           }
           .hidepc {
                display: none;
@@ -115,10 +121,12 @@
                                         href="{{url_for('user_blueprint.index')}}"><i class="bi bi-house-fill"></i>
                                         Inicio</a>
                               </li>
+                              {% if admin == "admin" %}
                               <li class="nav-item">
                                    <a class="nav-link link-light {% if request.path == url_for('user_blueprint.indexUserDashboard') %} active {% endif %}" href="{{url_for('user_blueprint.indexUserDashboard')}}"><i
                                              class="bi bi-person-fill"></i> Usuarios</a>
                               </li>
+                              {% endif %}
 
                               <li class="nav-item dark-bg">
                                    <div class="list-group-item list-group-item-action">
@@ -174,7 +182,7 @@
 
      <div class="container-fluid mt-4">
           <div class="row">
-               <div class="col-md-3 sidebar dark-bg hide m-auto" tabindex="0">
+               <div class="col-md-3 sidebar dark-bg hide m-auto" >
                     <a class="navbar-brand fs-3 mt-0 pt-0 link-light" href="/">SisTick</a>
                     <br>
                     {% if 'username' in session %}
@@ -184,11 +192,13 @@
                               <i class="bi bi-house-fill"></i>
                               <span>Inicio</span>
                          </a>
+                         {% if admin == "admin" %}
                          <a href="{{url_for('user_blueprint.indexUserDashboard')}}"
                               class="list-group-item list-group-item-action {% if request.path == url_for('user_blueprint.indexUserDashboard') %} active {% endif %}">
                               <i class="bi bi-person-fill"></i>
                               <span>Usuarios</span>
                          </a>
+                         {% endif %}
                          <div class="list-group-item list-group-item-action">
                               <p>
                                    <i class="bi bi-journal-text"></i>
@@ -224,15 +234,6 @@
                          </a>
                          {% endif %}
                     </div>
-                    {% else %}
-                    <div class="text-light pt-5">
-                         <h4>Bienvenido al SisTick</h4>
-                         <p>
-                              Sistema de gestion de tickets.
-                              <br>
-                              Inicie sesion para continuar.
-                         </p>
-                    </div>
                     {% endif %}
                </div>
                <div class="col-lg-10">
@@ -248,13 +249,14 @@
                                    <p>Desde aquí podrás gestionar a los usuarios, tickets y reportes de la plataforma.</p>
                               </div>
                          {% else %}
-                              <div class="text-dark pt-5 d-flex justify-content-center">
+
+                              <div class="main">
                                    <p>
                                         <h4>Bienvenido al SisTick</h4>
                                         <br>
                                         Sistema de gestion de tickets.
                                         <br>
-                                        Inicie sesion para continuar.
+                                        <a href="{{url_for('user_blueprint.login')}}"> Inicie Sesion </a>para continuar.
                                    </p>
                               </div>
                          {% endif %}

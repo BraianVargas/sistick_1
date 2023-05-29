@@ -1,32 +1,38 @@
 {% extends "base.html" %}
 {% block title %} Dashboard de usuario {% endblock %}
 {% block content %}
+
 <head>
      <style>
           table {
+               border: 2px black solid;
                width: 100%;
+               border-collapse: separate;
+               border-spacing: 0;
+               margin: auto;
           }
-          tr:first-child{
-               border: solid 2px black;
-               border-radius: 10px;
+
+          tr:first-child {
+               background-color: var(--dark-bg);
           }
-     
-          th, td {
+
+          th,td {
                text-align: left;
-               padding: 8px;
+               margin: auto;
+               font-weight: 600;
           }
-     
-          tr:nth-child(even){
-               background-color: white;
+
+          tr:nth-child(even) {
+               background-color: var(--secondary-bg);
           }
-          
+
           th {
+               margin: auto;
                background-color: var(--dark-mid-bg);
-               opacity: .8;
                color: white;
           }
-     
-          input[type=text] {
+
+          .search-input {
                width: 80%;
                border: 1px black solid;
                padding: 12px 20px;
@@ -35,7 +41,7 @@
                border: none;
                border-radius: 10px;
           }
-     
+
           button {
                background-color: var(--btn-bg);
                color: white;
@@ -45,83 +51,157 @@
                border-radius: 15px;
                border: solid 2px black;
           }
+
           .button {
+               margin: .5em;
                background-color: var(--btn-bg);
                color: white;
                padding: 12px 20px;
                border: none;
                cursor: pointer;
-               border-radius: 15px;
+               border-radius: 1em;
                border: solid 2px black;
+               text-decoration: none;
           }
-     
+
           .button:hover {
-               background-color:  var(--hover-bg);
+               color: white;
+               border: solid 2px black;
+               background-color: var(--hover-bg);
                transition: background-color .4s ease;
           }
-     
+
           button:hover {
-               background-color:  var(--hover-bg);
+               color: white;
+               border: solid 2px black;
+               background-color: var(--hover-bg);
                transition: background-color .4s ease;
           }
+
      </style>
- </head>
- <body>
+</head>
+
+<body>
      <h1>Dashboard de Usuarios</h1>
      <div class="d-block m-auto">
-          <input style="border:2px solid black;" type="text" id="search-box" placeholder="Buscar usuarios..." onkeyup="searchUsers()">
+          <input class="search-input" style="border:2px solid black;" type="text" id="search-box" placeholder="Buscar usuarios..."
+               onkeyup="searchUsers()">
           <button style="border:2px solid black;" class="W-20" type="submit" onclick="searchUsers()">
                <i class="bi bi-search"></i>
           </button>
+          <button style="border:2px solid black;" class="W-20" type="button" data-bs-toggle="modal"
+               data-bs-target="#newUserModal">
+               <i class="bi bi-plus-circle-dotted p-1"></i>
+               Nuevo Usuario
+          </button>
+          <!-- Modal -->
+          <div class="modal fade" id="newUserModal" tabindex="-1" aria-labelledby="newUserModalLabel"
+               aria-hidden="true">
+               <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                         <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="newUserModalLabel">Registrar Usuario</h1>
+                              <button type="button btn" class="btn-close button" data-bs-dismiss="modal"
+                                   aria-label="Close"></button>
+                         </div>
+                         <div class="modal-body">
+                              <div class="card">
+                                   <div class="modal-header card-header">
+                                        <h4 class="card-title text-center m-auto">Crear Usuario</h4>
+                                   </div>
+                                   <div class="card-body">
+                                        <form class="m-auto" action="/user/create" method="POST">
+                                             <div class="form-floating mb-3">
+                                                  <input type="text" name="username" class="form-control" id="inputNombre"
+                                                       placeholder="Introduce tu nombre" required>
+                                                  <label for="inputNombre" class="form-label">Nombre</label>
+                                             </div>
+                                             <div class="form-floating mb-3">
+                                                  <input type="email" name="email" class="form-control" id="inputEmail"
+                                                       placeholder="Introduce tu correo electrónico" required>
+                                                  <label for="inputEmail" class="form-label">Correo electrónico</label>
+                                             </div>
+                                             <div class="form-floating mb-3">
+                                                  <input type="password" name="password" class="form-control" id="inputPassword"
+                                                       placeholder="Introduce tu contraseña" required>
+                                                  <label for="inputPassword" class="form-label">Contraseña</label>
+                                             </div>
+                                             <div class="form-group mb-3">
+                                                  <label for="isadmin">¿Es Administrador?</label>
+                                                  <input type="checkbox" class="" name="isadmin" id="isadmin"
+                                                       placeholder="¿Es Administrador?">
+                                             </div>
+                                             <button type="submit" class="btn button fs-5">Guardar</button>
+                                        </form>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="modal-footer">
+                         </div>
+                    </div>
+               </div>
+          </div>
      </div>
-     <table id="users-table">
-         <tr>
-             <th>Nombre</th>
-             <th>Tipo de Usuario</th>
-             <th>Último Login</th>
-             <th>Acciones</th>
-         </tr>
-         {% for user in users %}
-          <tr>
-               <td class="text-black">{{ user['username'].capitalize() }}</td>
-               <td class="text-black">{{ user['admin'].capitalize() }}</td>
-               <td class="text-black">
-                    {% for log in logs %}
-                         {% if (user.id == log.user_id)%}
-                              {{ log.date }}
+     <div class="d-flex justify-content-center">
+          <table id="users-table">
+               <tr>
+                    <th>Nombre de usuario</th>
+                    <th>Tipo de Usuario</th>
+                    <th>Último Login</th>
+                    <th>Acciones</th>
+               </tr>
+               {% for user in users %}
+               <tr>
+                    <td class=" text-black">{{ user['username'].capitalize() }}</td>
+                    <td class=" text-black">{{ user['admin'].capitalize() }}</td>
+                    <td class=" text-black">
+                         {% for log in logs %}
+                              {% if (user.id == log.user_id)%}
+                                   {{ log.date }}
+                              {% endif %}
+                         {% endfor %}
+                    </td>
+                    <td class="">
+                         {% if user['sysactive'] == '0' %}
+                              <a class="button btn " href="{{ url_for('user_blueprint.activateUserRoute', userId = user.id, option = 1)}}">
+                                   <i style="color:red;" class="fs-4 bi bi-toggle-off"></i> 
+                              </a>
+                         {% else %}
+                              <a class="button btn {% if user['username'] == username %} disabled {% endif %}" href="{{ url_for('user_blueprint.activateUserRoute', userId = user.id, option = 0)}}">
+                                   <i style="color:black;" class="fs-4 bi bi-toggle-on"></i> 
+                              </a>
                          {% endif %}
-                    {% endfor %}
-               </td>
-               <td>
-                    {% if user['sysactive'] == '0' %}
-                         <a class="button" href="{{url_for('user_blueprint.activateUserRoute', userId = user.id, option = 1)}}">Activar</a>
-                    {% else %}
-                         <a class="button" href="{{url_for('user_blueprint.activateUserRoute', userId = user.id, option = 0)}}">Desactivar</a>
-                    {% endif %}
-               </td>
-          </tr>
-         {% endfor %}
-     </table>
+
+                         <a class="button btn" href="{{url_for('user_blueprint.editUser', userId = user['id'])}}">
+                              <i style="color:black;" class="fs-4 bi bi-pencil"></i>
+                         </a>
+                    </td>
+               </tr>
+               {% endfor %}
+          </table>
+     </div>
+
+
      <script>
-         function searchUsers() {
-             var input, filter, table, tr, td, i, txtValue;
-             input = document.getElementById("search-box");
-             filter = input.value.toUpperCase();
-             table = document.getElementById("users-table");
-             tr = table.getElementsByTagName("tr");
-             for (i = 0; i < tr.length; i++) {
-                 td = tr[i].getElementsByTagName("td")[0];
-                 if (td) {
-                     txtValue = td.textContent || td.innerText;
-                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                         tr[i].style.display = "";
-                     } else {
-                         tr[i].style.display = "none";
-                     }
-                 }
-             }
-         }
+          function searchUsers() {
+               var input, filter, table, tr, td, i, txtValue;
+               input = document.getElementById("search-box");
+               filter = input.value.toUpperCase();
+               table = document.getElementById("users-table");
+               tr = table.getElementsByTagName("tr");
+               for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                         txtValue = td.textContent || td.innerText;
+                         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                              tr[i].style.display = "";
+                         } else {
+                              tr[i].style.display = "none";
+                         }
+                    }
+               }
+          }
      </script>
- </body>
+</body>
 
 {% endblock %}

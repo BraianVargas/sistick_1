@@ -23,6 +23,7 @@ class Usuario(db.Model):
             salt_length=8
         )
         self.admin = admin
+        self.sysactive=1
 
     def __str__(self):
         return f'Usuario({self.id}, {self.username}, {self.email}, {self.admin})'
@@ -34,7 +35,8 @@ class Usuario(db.Model):
                 id = self.id,
                 username = self.username,
                 email = self.email,
-                admin = self.admin
+                admin = self.admin,
+                sysactive = self.sysactive
             )
         )
         return d

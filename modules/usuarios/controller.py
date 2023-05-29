@@ -22,7 +22,7 @@ def createUserController(requestedData):
           createRegister("Create", f"Create User Profile. User: {user.username}")
 
           # ---- MODIFICAR: enviar al dashboard
-          return redirect(url_for('user_blueprint.login'))
+          return redirect(url_for('user_blueprint.indexUserDashboard'))
           # ---- !!!!!!!!!!!!!
      except Exception as e:
           return f"Error. createUserController. -> \n {e}"

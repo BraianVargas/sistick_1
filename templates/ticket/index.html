@@ -6,6 +6,25 @@
           opacity: 0.4;
           cursor: not-allowed;
      }
+     .search-input {
+          width: 80%;
+          border: 1px black solid;
+          padding: 12px 20px;
+          margin: 8px 0;
+          box-sizing: border-box;
+          border: none;
+          border-radius: 10px;
+     }
+     
+     button {
+          background-color: var(--btn-bg);
+          color: white;
+          padding: 12px 20px;
+          border: none;
+          cursor: pointer;
+          border-radius: 15px;
+          border: solid 2px black;
+     }
 </style>
 
 <body>
@@ -23,12 +42,66 @@
      {% endif %}
      {% endwith %}
      <div class="container">
-          <div class="d-flex justify-content-left">
-               <a href="{{ url_for('ticket_blueprint.newTicket') }}" class="btn btn-primary">Nuevo Ticket</a>
-          </div>
           <h1 class="d-flex justify-content-center mb-3">Todos los Tickets</h1>
           <div class="table-responsive">
-               <table class="table align-middle ">
+               <input class="search-input" style="border:2px solid black;" type="text" id="search-box" placeholder="Buscar usuarios..."
+               onkeyup="searchUsers()">
+               <button style="border:2px solid black;" class="W-20" type="submit" onclick="searchUsers()">
+                    <i class="bi bi-search"></i>
+               </button>
+               <button style="border:2px solid black;" class="W-20" type="button" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal">
+                    <i class="bi bi-plus-circle-dotted p-1"></i>
+                    Nuevo Ticket
+               </button>
+               <!-- Modal -->
+               <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+               aria-hidden="true">
+               <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                         <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Registrar Usuario</h1>
+                              <button type="button btn" class="btn-close button" data-bs-dismiss="modal"
+                                   aria-label="Close"></button>
+                         </div>
+                         <div class="modal-body">
+                              <div class="card">
+                                   <div class="modal-header card-header">
+                                        <h4 class="card-title text-center m-auto">Crear Usuario</h4>
+                                   </div>
+                                   <div class="card-body">
+                                        <form class="m-auto" action="/user/create" method="POST">
+                                             <div class="form-floating mb-3">
+                                                  <input type="text" name="username" class="form-control" id="inputNombre"
+                                                       placeholder="Introduce tu nombre" required>
+                                                  <label for="inputNombre" class="form-label">Nombre</label>
+                                             </div>
+                                             <div class="form-floating mb-3">
+                                                  <input type="email" name="email" class="form-control" id="inputEmail"
+                                                       placeholder="Introduce tu correo electrónico" required>
+                                                  <label for="inputEmail" class="form-label">Correo electrónico</label>
+                                             </div>
+                                             <div class="form-floating mb-3">
+                                                  <input type="password" name="password" class="form-control" id="inputPassword"
+                                                       placeholder="Introduce tu contraseña" required>
+                                                  <label for="inputPassword" class="form-label">Contraseña</label>
+                                             </div>
+                                             <div class="form-group mb-3">
+                                                  <label for="isadmin">¿Es Administrador?</label>
+                                                  <input type="checkbox" class="" name="isadmin" id="isadmin"
+                                                       placeholder="¿Es Administrador?">
+                                             </div>
+                                             <button type="submit" class="btn button fs-5">Guardar</button>
+                                        </form>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="modal-footer">
+                         </div>
+                    </div>
+               </div>
+          </div>
+               <table id="tickets-table" class="table align-middle ">
                     <thead>
                          <tr class="table-dark">
                               <th>ID</th>
@@ -158,11 +231,30 @@
                     </li>
                     <li class="page-item">
                          <a class="page-link {% if not data.has_next %} disabled {% endif %}" href="{{ url_for(endpoint, page=data.pages) }}">&raquo;</a>
-                     </li>
-                     
+                    </li>
                </ul>
           </nav>
      </div>
 
+     <script>
+          function searchUsers() {
+               var input, filter, table, tr, td, i, txtValue;
+               input = document.getElementById("search-box");
+               filter = input.value.toUpperCase();
+               table = document.getElementById("tickets-table");
+               tr = table.getElementsByTagName("tr");
+               for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                         txtValue = td.textContent || td.innerText;
+                         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                              tr[i].style.display = "";
+                         } else {
+                              tr[i].style.display = "none";
+                         }
+                    }
+               }
+          }
+     </script>
 </body>
 {% endblock %}
