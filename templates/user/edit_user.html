@@ -37,27 +37,70 @@
           background-color: var(--hover-bg);
           transition: background-color .4s ease;
      }
+     .title{
+          padding: 1em;
+          text-align: center;
+          font-size: xx-large;
+          border-radius: 9px 9px 0 0;
+          background-color: var(--dark-bg);
+          color: white;
+     }
+     .footer{
+          padding: 1em;
+          text-align: center;
+          font-size: xx-large;
+          border-radius: 0 0 9px 9px;
+          background-color: var(--dark-bg);
+          color: white;
+     }
+     form{
+          border: 1px solid var(--dark-bg);
+          border-radius: 10px;
+     }
+
+     .w-md-50{
+          width: 50%;
+     }
+     
+     @media only screen and (max-width: 767px) {
+          .w-md-50 {
+               width: 100%;
+          }
+     }
+
 </style>
 <body>
-     <form class="w-80 m-auto" action="/user/edit/{{user['id']}}" method="POST">
-          <div class="form-floating mb-3">
+     <a href="{{url_for('user_blueprint.indexUserDashboard')}}" class="btn button">Volver</a>
+
+     <form class="w-md-50 m-auto" action="/user/edit/{{user['id']}}" method="POST">
+          <h1 class="title" id="newUserModalLabel">Editar Usuario</h1>
+          <div class="form-floating mb-3 px-2">
                <input type="text" name="username" class="form-control" id="inputNombre"
                     placeholder="Introduce tu nombre" value="{{user['username']}}" required>
                <label for="inputNombre" class="form-label">Nombre</label>
           </div>
-          <div class="form-floating mb-3">
+          <div class="form-floating mb-3 px-2">
                <input type="email" name="email" class="form-control" id="inputEmail"
                     placeholder="Introduce tu correo electrónico" value="{{user['email']}}" required>
                <label for="inputEmail" class="form-label">Correo electrónico</label>
           </div>
-          <div class=" input-group form-floating mb-3">
+          <!-- <div class=" input-group form-floating mb-3 px-2">
                <input type="text" name="password" class="form-control" id="inputPassword"
-                    placeholder="Introduce tu contraseña" value="{{user['password']}}" required>
+                    placeholder="Introduce tu contraseña" value="{{password}}" required>
                <label for="inputPassword" class="form-label">Contraseña</label>
                <span id="password-toggle-btn" class="input-group-text" onclick="togglePasswordVisibility()"><i class="bi bi-eye"></i></span>
-               
+          </div> -->
+          <div class="form-floating mb-3 px-2">
+               <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                    <option aria-readonly="" >Seleccionar opcion</option>
+                    <option {% if user['admin'] == 'usuario' %} selected {% endif %} value="usuario">Estandar</option>
+                    <option {% if user['admin'] == 'admin' %} selected {% endif %} value="admin">Administrador</option>
+               </select>
+               <label for="floatingSelect">Tipo de usuario</label>
           </div>
+          
           <button type="submit" class="btn button fs-5">Guardar</button>
+          <div class="footer"></div>
      </form>
 </body>
 

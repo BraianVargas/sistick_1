@@ -27,7 +27,6 @@ def editUser(userId):
 # and validate the user for the access to the app
 @userBP.route("/login", methods = ['GET','POST'])
 def login():
-     print(request.method)
      if request.method == 'POST':
           status = checkLoginController(request.form.to_dict())
           if status == True:

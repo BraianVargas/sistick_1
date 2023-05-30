@@ -2,6 +2,7 @@
 from flask import *
 from flask_sqlalchemy import SQLAlchemy
 
+
 # Importación de módulos propios
 from extensions import db
 from modules.usuarios import userBP

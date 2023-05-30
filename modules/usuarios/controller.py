@@ -1,10 +1,23 @@
 from werkzeug.security import check_password_hash
 from sqlalchemy import *
 from flask import *
+import hashlib
 
 from extensions import db
 from modules.usuarios.model import *
 from modules.historical.controller import *
+
+
+
+def decode_password(encoded_password):
+    # Crear un objeto de hash
+    hash_object = hashlib.sha256()
+
+    # Decodificar la contraseña encriptada
+    hash_object.update(encoded_password.encode('utf-8'))
+    decoded_password = hash_object.hexdigest()
+
+    return decoded_password
 
 def createUserController(requestedData):
      try:
@@ -48,6 +61,9 @@ def getAllUsersToDashboard():
 
 def checkLoginController(dataJson):
      user = db.session.query(Usuario).filter_by(username=dataJson["username"]).first()
+     if user.sysactive == '0':
+          flash("Usuario desactivado")
+          return redirect(url_for("user_blueprint.login"))
 
      if not user or not check_password_hash(user.password, dataJson["password"]):
           flash('Usuario o contraseña incorrectos. Reintente.')
